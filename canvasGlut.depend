@@ -1,0 +1,190 @@
+# depslib dependency file v1.0
+1740581235 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\gl_canvas2d.cpp
+	"gl_canvas2d.h"
+	<GL/glut.h>
+
+1743362954 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\gl_canvas2d.h
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	<GL/glut.h>
+	<GL/freeglut_ext.h>
+	"Vector2.h"
+
+1632060799 c:\users\samsung\desktop\pozzer\demos\include\gl\glut.h
+	"freeglut_std.h"
+
+1632060797 c:\users\samsung\desktop\pozzer\demos\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1632060794 c:\users\samsung\desktop\pozzer\demos\include\gl\freeglut_ext.h
+	<stdarg.h>
+
+1589217858 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\vector2.h
+
+1589218349 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\relogio.cpp
+	"Relogio.h"
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+
+1193164156 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\relogio.h
+	"gl_canvas2d.h"
+
+1743441589 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\bmp.cpp
+	"Bmp.h"
+	<string.h>
+	"gl_canvas2d.h"
+
+1743362848 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\bmp.h
+	<stdio.h>
+	<stdlib.h>
+
+1743517134 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\camadas.cpp
+	"Camadas.h"
+	<string.h>
+	"gl_canvas2d.h"
+	<vector>
+
+1743527961 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\interface.cpp
+	"Interface.h"
+	<string.h>
+	"gl_canvas2d.h"
+
+1743528727 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\main.cpp
+	<GL/glut.h>
+	<GL/freeglut_ext.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<dirent.h>
+	"gl_canvas2d.h"
+	"Bmp.h"
+	"GerenciadorCamadas.h"
+	"Interface.h"
+	<string>
+
+1589214882 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\bola.h
+	"gl_canvas2d.h"
+
+1589214891 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\botao.h
+	"gl_canvas2d.h"
+
+1743516179 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\camadas.h
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+
+1743527979 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\interface.h
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+	<string>
+	<dirent.h>
+
+1743516179 c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\gerenciadorcamadas.h
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+
+1743517313 source:c:\users\samsung\desktop\pozzer\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
+	"GerenciadorCamadas.h"
+	<string.h>
+	"gl_canvas2d.h"
+	<vector>
+
+1743536635 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.cpp
+	"Bmp.h"
+	<string.h>
+	"gl_canvas2d.h"
+
+1743536635 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.h
+	<stdio.h>
+	<stdlib.h>
+
+1743536635 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gl_canvas2d.h
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	<GL/glut.h>
+	<GL/freeglut_ext.h>
+	"Vector2.h"
+
+1632060799 c:\users\gabriel\desktop\cg\demos\include\gl\glut.h
+	"freeglut_std.h"
+
+1632060797 c:\users\gabriel\desktop\cg\demos\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1632060794 c:\users\gabriel\desktop\cg\demos\include\gl\freeglut_ext.h
+	<stdarg.h>
+
+1743536635 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\vector2.h
+
+1743950065 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
+	"GerenciadorCamadas.h"
+	<string.h>
+	"gl_canvas2d.h"
+	<vector>
+
+1743950376 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.h
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+
+1743536635 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gl_canvas2d.cpp
+	"gl_canvas2d.h"
+	<GL/glut.h>
+
+1743950265 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.cpp
+	"Interface.h"
+	<string.h>
+	"gl_canvas2d.h"
+
+1743946510 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.h
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+	<string>
+	<dirent.h>
+
+1743946356 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\main.cpp
+	<GL/glut.h>
+	<GL/freeglut_ext.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<dirent.h>
+	"gl_canvas2d.h"
+	"Bmp.h"
+	"GerenciadorCamadas.h"
+	"Interface.h"
+	<string>
+
+1743536635 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\relogio.cpp
+	"Relogio.h"
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+
+1743536635 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\relogio.h
+	"gl_canvas2d.h"
+
