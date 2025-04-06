@@ -32,7 +32,6 @@ typedef struct {
    int borda1X, borda1Y, borda2X, borda2Y;
    int bordaHideX;
    int posCamada;
-   bool visivel;
    BotaoSwitch moveCima;
    BotaoSwitch moveBaixo;
    char nome[50];
@@ -59,6 +58,9 @@ public:
    void renderBotaoSwitch(BotaoSwitch botaoSwitch);
    void renderBotaoCamada();
    int getQntCamadas();
+   bool verificaBotaoHide(int mouseX, int mouseY);
+   bool verificaBotaoAtiva(int mouseX, int mouseY);
+   void pintarCamada(int mouseX, int mouseY);
 };
 
 #endif

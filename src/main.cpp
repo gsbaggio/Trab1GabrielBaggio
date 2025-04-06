@@ -95,6 +95,12 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(interface->verificaClickBotao(interface->getBotaoAddImagem(), mouseX, mouseY)){
             interface->setAbertoSubmenuArquivos(1, mouseX, mouseY);
         }
+        else if(gCamadas->verificaBotaoHide(mouseX, mouseY)){
+
+        }
+        else if(gCamadas->verificaBotaoAtiva(mouseX, mouseY)){
+
+        }
         gCamadas->setPintando(0);
     }
     else if(button == 0 && state == 0){
@@ -103,8 +109,8 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         }
     }
 
-    if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(mouseX, mouseY)){
-        printf("Estou pintando!");
+    if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+        gCamadas->pintarCamada(mouseX, mouseY);
     }
     printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 

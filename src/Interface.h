@@ -42,9 +42,10 @@ private:
     int bordaMenuLateralX, grossuraBordasLateraisNasCamadas, inicioMenuLateralX;
     int tamanhoLadoQuadradosFundo, borda1X, borda1Y, borda2X, borda2Y;
     BOTAO botaoAddImagem;
-    BOTAO pintar;
     BOTAO clicar;
+    BOTAO pintar;
     BOTAO cor[10];
+    unsigned char corSlecionadaRGBA[4];
 
     Submenu submenuArquivos;
     int qntArquivos;
