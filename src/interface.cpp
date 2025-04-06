@@ -33,6 +33,11 @@ Interface::Interface(int screenWidth, int screenHeight)
     botaoAddImagem.borda2Y = botaoAddImagem.borda1Y + 30;
     botaoAddImagem.tem_borda = 1;
 
+    botaoSelecionado = 0;
+    RGBA[0] = 255;
+    RGBA[1] = 0;
+    RGBA[2] = 0;
+    RGBA[3] = 1;
 }
 
 void Interface::render(int screenWidth, int screenHeight){
@@ -161,4 +166,13 @@ std::string Interface::verificaArquivoParaAbrir(int mouseX, int mouseY){
             return botaoArquivo.nome;
         }
     }
+    return botaoArquivos[0].nome;
+}
+
+int Interface::getBotaoSelecionado(){
+    return botaoSelecionado;
+}
+
+unsigned char *Interface::getRGBA(){
+    return RGBA;
 }

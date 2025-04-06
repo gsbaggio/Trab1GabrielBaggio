@@ -110,7 +110,7 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
     }
 
     if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
-        gCamadas->pintarCamada(mouseX, mouseY);
+        gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA());
     }
     printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 

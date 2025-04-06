@@ -189,16 +189,20 @@ bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){
     return 0;
 }
 
-void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY){
+void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGBA){
     int posX, posY, posRGBA;
     posX = mouseX - borda1X;
     posY = mouseY - borda1Y;
     posRGBA = (posY * width + posX) * 4;
+    unsigned char r = RGBA[0];
+    unsigned char g = RGBA[1];
+    unsigned char b = RGBA[2];
+    unsigned char a = RGBA[3];
     if(posX < 0 || posX >= width || posY < 0 || posY >= height){
         return;
     }
-    camadas[camadaAtiva].camada[posRGBA] = 255;
-    camadas[camadaAtiva].camada[posRGBA + 1] = 0;
-    camadas[camadaAtiva].camada[posRGBA + 2] = 0;
-    camadas[camadaAtiva].camada[posRGBA + 3] = 1;
+    camadas[camadaAtiva].camada[posRGBA] = r;
+    camadas[camadaAtiva].camada[posRGBA + 1] = g;
+    camadas[camadaAtiva].camada[posRGBA + 2] = b;
+    camadas[camadaAtiva].camada[posRGBA + 3] = a;
 }

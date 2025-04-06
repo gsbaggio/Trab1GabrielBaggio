@@ -45,7 +45,8 @@ private:
     BOTAO clicar;
     BOTAO pintar;
     BOTAO cor[10];
-    unsigned char corSlecionadaRGBA[4];
+    int botaoSelecionado;
+    unsigned char RGBA[4];
 
     Submenu submenuArquivos;
     int qntArquivos;
@@ -69,6 +70,8 @@ public:
     Submenu getSubmenuArquivos();
     bool verificaClickSubmenu(Submenu submenu, int mouseX, int mouseY);
     std::string verificaArquivoParaAbrir(int mouseX, int mouseY);
+    int getBotaoSelecionado();
+    unsigned char *getRGBA();
 };
 
 #endif

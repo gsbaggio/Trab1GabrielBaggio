@@ -60,7 +60,7 @@ public:
    int getQntCamadas();
    bool verificaBotaoHide(int mouseX, int mouseY);
    bool verificaBotaoAtiva(int mouseX, int mouseY);
-   void pintarCamada(int mouseX, int mouseY);
+   void pintarCamada(int mouseX, int mouseY, unsigned char *RGBA);
 };
 
 #endif
