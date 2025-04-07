@@ -34,6 +34,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     botaoAddImagem.tem_borda = 1;
 
     botaoSelecionado = 0;
+    raioCor = 10;
     RGBA[0] = 255;
     RGBA[1] = 0;
     RGBA[2] = 0;

@@ -43,9 +43,13 @@ private:
     int tamanhoLadoQuadradosFundo, borda1X, borda1Y, borda2X, borda2Y;
     BOTAO botaoAddImagem;
     BOTAO clicar;
-    BOTAO pintar;
+    BOTAO pincel;
+    BOTAO spray;
+    BOTAO marcaTexto;
+    BOTAO borracha;
     BOTAO cor[10];
-    int botaoSelecionado;
+    int botaoSelecionado; // 1 = pincel, 2 = spray, 3 = marca texto, 4 = borracha
+    int raioCor;
     unsigned char RGBA[4];
 
     Submenu submenuArquivos;
