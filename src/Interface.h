@@ -46,8 +46,8 @@ private:
     BOTAO pincel;
     BOTAO spray;
     BOTAO marcaTexto;
+    BOTAO balde;
     BOTAO borracha;
-    BOTAO cor[10];
     int botaoSelecionado; // 1 = pincel, 2 = spray, 3 = marca texto, 4 = borracha
     int raioCor;
     unsigned char RGBA[4];
@@ -66,7 +66,19 @@ public:
     void renderBotao(BOTAO botao);
     bool verificaClickBotao(BOTAO botao, int mouseX, int mouseY);
     void renderBotaoAdd();
+    void renderBotaoClicar();
+    void renderBotaoPincel();
+    void renderBotaoSpray();
+    void renderBotaoMarcaTexto();
+    void renderBotaoBalde();
+    void renderBotaoBorracha();
     BOTAO getBotaoAddImagem();
+    BOTAO getBotaoClicar();
+    BOTAO getBotaoPincel();
+    BOTAO getBotaoSpray();
+    BOTAO getBotaoMarcaTexto();
+    BOTAO getBotaoBalde();
+    BOTAO getBotaoBorracha();
     void carregarNomeArquivos();
     void renderSubmenuArquivos();
     void setAbertoSubmenuArquivos(bool aberto, int mouseX, int mouseY);
