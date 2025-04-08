@@ -74,6 +74,38 @@ Interface::Interface(int screenWidth, int screenHeight)
     borracha.borda2Y = borracha.borda1Y + alturaBotoesClick;
     borracha.tem_borda = 0;
 
+    sliderR.inicioX = inicioMenuLateralX + 5;
+    sliderR.fimX = balde.borda2X;
+    sliderR.Y = screenHeight * 8 / 10;
+    sliderR.valorMinimo = 0;
+    sliderR.valorMaximo = 255;
+    sliderR.valorAtual = 255;
+    sliderR.segurando = 0;
+
+    sliderG.inicioX = inicioMenuLateralX + 5;
+    sliderG.fimX = balde.borda2X;
+    sliderG.Y = sliderR.Y - 30;
+    sliderG.valorMinimo = 0;
+    sliderG.valorMaximo = 255;
+    sliderG.valorAtual = 0;
+    sliderG.segurando = 0;
+
+    sliderB.inicioX = inicioMenuLateralX + 5;
+    sliderB.fimX = balde.borda2X;
+    sliderB.Y = sliderG.Y - 30;
+    sliderB.valorMinimo = 0;
+    sliderB.valorMaximo = 255;
+    sliderB.valorAtual = 0;
+    sliderB.segurando = 0;
+
+    sliderRaio.inicioX = inicioMenuLateralX + 5;
+    sliderRaio.fimX = balde.borda2X;
+    sliderRaio.Y = sliderB.Y - 30;
+    sliderRaio.valorMinimo = 1;
+    sliderRaio.valorMaximo = 50;
+    sliderRaio.valorAtual = 10;
+    sliderRaio.segurando = 0;
+
     botaoSelecionado = 0;
     raioCor = 10;
     RGBA[0] = 255;
@@ -98,6 +130,10 @@ void Interface::render(int screenWidth, int screenHeight){
     renderBotaoMarcaTexto();
     renderBotaoBalde();
     renderBotaoBorracha();
+    renderSliderR();
+    renderSliderG();
+    renderSliderB();
+    renderSliderRaio();
 
     if(submenuArquivos.aberto){
         renderSubmenuArquivos();
@@ -329,4 +365,134 @@ unsigned char *Interface::getRGBA(){
 
 int Interface::getRaioCor(){
     return raioCor;
+}
+
+void Interface::renderSlider(Slider slider){
+    CV::color(0.3, 0.3, 0.3);
+    CV::rectFill(slider.inicioX, slider.Y, slider.fimX, slider.Y + 10);
+    CV::color(0.9, 0.9, 0.9);
+    CV::rectFill(slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo), slider.Y, slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo) + 10, slider.Y + 10);
+}
+
+void Interface::renderSliderR(){
+    renderSlider(sliderR);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderR.inicioX, sliderR.Y + 15, "R: ");
+    CV::text(sliderR.fimX - 30, sliderR.Y + 15, std::to_string(sliderR.valorAtual).c_str());
+}
+void Interface::renderSliderG(){
+    renderSlider(sliderG);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderG.inicioX, sliderG.Y + 15, "G: ");
+    CV::text(sliderG.fimX - 30, sliderG.Y + 15, std::to_string(sliderG.valorAtual).c_str());
+}
+void Interface::renderSliderB(){
+    renderSlider(sliderB);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderB.inicioX, sliderB.Y + 15, "B: ");
+    CV::text(sliderB.fimX - 30, sliderB.Y + 15, std::to_string(sliderB.valorAtual).c_str());
+}
+
+void Interface::renderSliderRaio(){
+    renderSlider(sliderRaio);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderRaio.inicioX, sliderRaio.Y + 15, "Raio: ");
+    CV::text(sliderRaio.fimX - 30, sliderRaio.Y + 15, std::to_string(sliderRaio.valorAtual).c_str());
+}
+
+bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){
+    if(mouseX > slider.inicioX && mouseX < slider.fimX && mouseY > slider.Y && mouseY < slider.Y + 10){
+        return 1;
+    }
+    return 0;
+}
+
+Slider Interface::getSliderR(){
+    return sliderR;
+}
+Slider Interface::getSliderG(){
+    return sliderG;
+}
+Slider Interface::getSliderB(){
+    return sliderB;
+}
+Slider Interface::getSliderRaio(){
+    return sliderRaio;
+}
+
+void Interface::setSegurandoR(bool segurando){
+    sliderR.segurando = segurando;
+}
+void Interface::setSegurandoG(bool segurando){
+    sliderG.segurando = segurando;
+}
+void Interface::setSegurandoB(bool segurando){
+    sliderB.segurando = segurando;
+}
+void Interface::setSegurandoRaio(bool segurando){
+    sliderRaio.segurando = segurando;
+}
+
+bool Interface::getSegurandoR(){
+    return sliderR.segurando;
+}
+
+bool Interface::getSegurandoG(){
+    return sliderG.segurando;
+}
+
+bool Interface::getSegurandoB(){
+    return sliderB.segurando;
+}
+
+bool Interface::getSegurandoRaio(){
+    return sliderRaio.segurando;
+}
+
+void Interface::mudaValorSliderR(int mouseX){
+    int valor = (sliderR.valorMaximo - sliderR.valorMinimo) * (mouseX - sliderR.inicioX) / (sliderR.fimX - sliderR.inicioX) + sliderR.valorMinimo;
+    if(valor > sliderR.valorMaximo){
+        valor = 255;
+    }
+    if(valor < sliderR.valorMinimo){
+        valor = 0;
+    }
+    sliderR.valorAtual = valor;
+    RGBA[0] = valor;
+}
+
+void Interface::mudaValorSliderG(int mouseX){
+    int valor = (sliderG.valorMaximo - sliderG.valorMinimo) * (mouseX - sliderG.inicioX) / (sliderG.fimX - sliderG.inicioX) + sliderG.valorMinimo;
+    if(valor > sliderG.valorMaximo){
+        valor = 255;
+    }
+    if(valor < sliderG.valorMinimo){
+        valor = 0;
+    }
+    sliderG.valorAtual = valor;
+    RGBA[1] = valor;
+}
+
+void Interface::mudaValorSliderB(int mouseX){
+    int valor = (sliderB.valorMaximo - sliderB.valorMinimo) * (mouseX - sliderB.inicioX) / (sliderB.fimX - sliderB.inicioX) + sliderB.valorMinimo;
+    if(valor > sliderB.valorMaximo){
+        valor = 255;
+    }
+    if(valor < sliderB.valorMinimo){
+        valor = 0;
+    }
+    sliderB.valorAtual = valor;
+    RGBA[2] = valor;
+}
+
+void Interface::mudaValorSliderRaio(int mouseX){
+    int valor = (sliderRaio.valorMaximo - sliderRaio.valorMinimo) * (mouseX - sliderRaio.inicioX) / (sliderRaio.fimX - sliderRaio.inicioX) + sliderRaio.valorMinimo;
+    if(valor > sliderRaio.valorMaximo){
+        valor = 50;
+    }
+    if(valor < sliderRaio.valorMinimo){
+        valor = 1;
+    }
+    sliderRaio.valorAtual = valor;
+    raioCor = valor;
 }

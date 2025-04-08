@@ -57,88 +57,89 @@ void Bmp::convertBGRtoRGB()
 }
 
 
+// Carrega uma imagem BMP do arquivo especificado.
 void Bmp::load(const char *fileName)
 {
-  FILE *fp = fopen(fileName, "rb");
-  if( fp == NULL )
-  {
-     printf("\nErro ao abrir arquivo %s para leitura", fileName);
-     return;
-  }
 
-  printf("\n\nCarregando arquivo %s", fileName);
+   FILE *fp = fopen(fileName, "rb");
+   if( fp == NULL )
+   {
+      printf("\nErro ao abrir arquivo %s para leitura", fileName);
+      return;
+   }
 
-  //le o HEADER componente a componente devido ao problema de alinhamento de bytes. Usando
-  //o comando fread(header, sizeof(HEADER),1,fp) sao lidos 16 bytes ao inves de 14
-  fread(&header.type,      sizeof(unsigned short int), 1, fp);
-  fread(&header.size,      sizeof(unsigned int),       1, fp);
-  fread(&header.reserved1, sizeof(unsigned short int), 1, fp);
-  fread(&header.reserved2, sizeof(unsigned short int), 1, fp);
-  fread(&header.offset,    sizeof(unsigned int),       1, fp); //indica inicio do bloco de pixels
+   printf("\n\nCarregando arquivo %s", fileName);
 
-  //le o INFOHEADER componente a componente devido ao problema de alinhamento de bytes
-  fread(&info.size,        sizeof(unsigned int),       1, fp);
-  fread(&info.width,       sizeof(int),                1, fp);
-  fread(&info.height,      sizeof(int),                1, fp);
-  fread(&info.planes,      sizeof(unsigned short int), 1, fp);
-  fread(&info.bits,        sizeof(unsigned short int), 1, fp);
-  fread(&info.compression, sizeof(unsigned int),       1, fp);
-  fread(&info.imagesize,   sizeof(unsigned int),       1, fp);
-  fread(&info.xresolution, sizeof(int),                1, fp);
-  fread(&info.yresolution, sizeof(int),                1, fp);
-  fread(&info.ncolours,    sizeof(unsigned int),       1, fp);
-  fread(&info.impcolours,  sizeof(unsigned int),       1, fp);
+   fread(&header.type,      sizeof(unsigned short int), 1, fp);
+   fread(&header.size,      sizeof(unsigned int),       1, fp);
+   fread(&header.reserved1, sizeof(unsigned short int), 1, fp);
+   fread(&header.reserved2, sizeof(unsigned short int), 1, fp);
+   fread(&header.offset,    sizeof(unsigned int),       1, fp);
 
-  width  = info.width;
-  height = info.height;
-  bits   = info.bits;
-  bytesPerLine =(3 * (width + 1) / 4) * 4;
-  imagesize    = bytesPerLine*height;
-  int delta    = bytesPerLine - (3 * width);
+   fread(&info.size,        sizeof(unsigned int),       1, fp);
+   fread(&info.width,       sizeof(int),                1, fp);
+   fread(&info.height,      sizeof(int),                1, fp);
+   fread(&info.planes,      sizeof(unsigned short int), 1, fp);
+   fread(&info.bits,        sizeof(unsigned short int), 1, fp);
+   fread(&info.compression, sizeof(unsigned int),       1, fp);
+   fread(&info.imagesize,   sizeof(unsigned int),       1, fp);
+   fread(&info.xresolution, sizeof(int),                1, fp);
+   fread(&info.yresolution, sizeof(int),                1, fp);
+   fread(&info.ncolours,    sizeof(unsigned int),       1, fp);
+   fread(&info.impcolours,  sizeof(unsigned int),       1, fp);
 
-  printf("\nImagem: %dx%d - Bits: %d", width, height, bits);
-  printf("\nbytesPerLine: %d", bytesPerLine);
-  printf("\nbytesPerLine: %d", width * 3);
-  printf("\ndelta: %d", delta);
-  printf("\nimagesize: %d %d", imagesize, info.imagesize);
+   width  = info.width;
+   height = info.height;
+   bits   = info.bits;
 
-  //realiza diversas verificacoes de erro e compatibilidade
-  if( header.type != 19778 )
-  {
-     printf("\nError: Arquivo BMP invalido");
-     getchar();
-     exit(0);
-  }
+   bytesPerLine = (3 * (width + 1) / 4) * 4;
+   imagesize    = bytesPerLine * height;
+   int delta    = bytesPerLine - (3 * width);
 
-  if( width*height*3 != imagesize )
-  {
-     printf("\nWarning: Arquivo BMP nao tem largura multipla de 4");
-     getchar();
-  }
+   printf("\nImagem: %dx%d - Bits: %d", width, height, bits);
+   printf("\nbytesPerLine: %d", bytesPerLine);
+   printf("\nbytesPerLine: %d", width * 3);
+   printf("\ndelta: %d", delta);
+   printf("\nimagesize: %d %d", imagesize, info.imagesize);
 
-  if( info.compression != 0 )
-  {
-     printf("\nError: Formato BMP comprimido nao suportado");
-     getchar();
-     return;
-  }
-  if( bits != 24 )
-  {
-     printf("\nError: Formato BMP com %d bits/pixel nao suportado", bits);
-     getchar();
-     return;
-  }
+   if( header.type != 19778 )
+   {
+      printf("\nError: Arquivo BMP invalido");
+      getchar();
+      exit(0);
+   }
 
-  if( info.planes != 1 )
-  {
-     printf("\nError: Numero de Planes nao suportado: %d", info.planes);
-     getchar();
-     return;
-  }
+   if( width*height*3 != imagesize )
+   {
+      printf("\nWarning: Arquivo BMP nao tem largura multipla de 4");
+   }
 
-  data = new unsigned char[imagesize];
-  fseek(fp, header.offset, SEEK_SET);
-  fread(data, sizeof(unsigned char), imagesize, fp);
+   if( info.compression != 0 )
+   {
+      printf("\nError: Formato BMP comprimido nao suportado");
+      getchar();
+      return;
+   }
+   if( bits != 24 )
+   {
+      printf("\nError: Formato BMP com %d bits/pixel nao suportado", bits);
+      getchar();
+      return;
+   }
 
-  fclose(fp);
+   if( info.planes != 1 )
+   {
+      printf("\nError: Numero de Planes nao suportado: %d", info.planes);
+      getchar();
+      return;
+   }
+
+   data = new unsigned char[3 * width * height];
+   for(int i = 0; i < height; i++){
+      int pos = i * bytesPerLine;
+      fseek(fp, header.offset + pos, SEEK_SET);
+      fread(data + width * 3 * i, sizeof(unsigned char), width * 3, fp);
+   }
+
+   fclose(fp);
 }

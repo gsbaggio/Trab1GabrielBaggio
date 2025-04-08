@@ -102,7 +102,7 @@
 	"gl_canvas2d.h"
 	<vector>
 
-1743957523 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.cpp
+1744153096 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.cpp
 	"Bmp.h"
 	<string.h>
 	"gl_canvas2d.h"
@@ -155,19 +155,19 @@
 	"gl_canvas2d.h"
 	<GL/glut.h>
 
-1744078738 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.cpp
+1744155142 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.cpp
 	"Interface.h"
 	<string.h>
 	"gl_canvas2d.h"
 
-1744080536 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.h
+1744155146 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.h
 	<stdio.h>
 	<stdlib.h>
 	<vector>
 	<string>
 	<dirent.h>
 
-1744080138 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\main.cpp
+1744155213 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\main.cpp
 	<GL/glut.h>
 	<GL/freeglut_ext.h>
 	<math.h>

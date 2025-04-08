@@ -119,10 +119,26 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
             interface->alteraBotaoSelecionado(5);
         }
         gCamadas->setPintando(0);
+        interface->setSegurandoR(0);
+        interface->setSegurandoG(0);
+        interface->setSegurandoB(0);
+        interface->setSegurandoRaio(0);
     }
     else if(button == 0 && state == 0){
         if(gCamadas->verificaMouseCamada(mouseX, mouseY)){
             gCamadas->setPintando(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderR(), mouseX, mouseY)){
+            interface->setSegurandoR(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderG(), mouseX, mouseY)){
+            interface->setSegurandoG(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderB(), mouseX, mouseY)){
+            interface->setSegurandoB(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderRaio(), mouseX, mouseY)){
+            interface->setSegurandoRaio(1);
         }
     }
 
@@ -142,6 +158,19 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(interface->getBotaoSelecionado() == 5){
             gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 5, interface->getRaioCor());
         }
+    }
+
+    if(interface->getSegurandoR()){
+        interface->mudaValorSliderR(mouseX);
+    }
+    else if(interface->getSegurandoG()){
+        interface->mudaValorSliderG(mouseX);
+    }
+    else if(interface->getSegurandoB()){
+        interface->mudaValorSliderB(mouseX);
+    }
+    else if(interface->getSegurandoRaio()){
+        interface->mudaValorSliderRaio(mouseX);
     }
     printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 

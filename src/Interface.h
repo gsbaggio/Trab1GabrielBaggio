@@ -37,9 +37,9 @@ typedef struct {
 
 typedef struct {
     int inicioX, fimX, Y;
-    float porcentagem;
     int valorMinimo, valorMaximo;
     int valorAtual;
+    bool segurando;
 }Slider;
 
 
@@ -106,6 +106,28 @@ public:
     void setBotaoSelecionado(int botaoSelecionado);
     unsigned char *getRGBA();
     int getRaioCor();
+    void renderSlider(Slider slider);
+    void renderSliderR();
+    void renderSliderG();
+    void renderSliderB();
+    void renderSliderRaio();
+    bool verificaSegurandoSlider(Slider slider, int mouseX, int mouseY);
+    Slider getSliderR();
+    Slider getSliderG();
+    Slider getSliderB();
+    Slider getSliderRaio();
+    void setSegurandoR(bool segurando);
+    void setSegurandoG(bool segurando);
+    void setSegurandoB(bool segurando);
+    void setSegurandoRaio(bool segurando);
+    bool getSegurandoR();
+    bool getSegurandoG();
+    bool getSegurandoB();
+    bool getSegurandoRaio();
+    void mudaValorSliderR(int valor);
+    void mudaValorSliderG(int valor);
+    void mudaValorSliderB(int valor);
+    void mudaValorSliderRaio(int valor);
 };
 
 #endif
