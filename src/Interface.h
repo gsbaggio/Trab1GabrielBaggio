@@ -35,6 +35,13 @@ typedef struct {
     int deltaY;
 }BotaoArquivo;
 
+typedef struct {
+    int inicioX, fimX, Y;
+    float porcentagem;
+    int valorMinimo, valorMaximo;
+    int valorAtual;
+}Slider;
+
 
 class Interface
 {
@@ -48,7 +55,15 @@ private:
     BOTAO marcaTexto;
     BOTAO balde;
     BOTAO borracha;
-    int botaoSelecionado; // 1 = pincel, 2 = spray, 3 = marca texto, 4 = borracha
+    Slider sliderR;
+    Slider sliderG;
+    Slider sliderB;
+    Slider sliderRaio;
+
+    BOTAO flipVertical;
+    BOTAO flipHorizontal;
+    Slider controleBrilho;
+    int botaoSelecionado; // 0 = clicar, 1 = pincel, 2 = spray, 3 = marca texto, 4 = balde, 5 = borracha
     int raioCor;
     unsigned char RGBA[4];
 
@@ -79,6 +94,7 @@ public:
     BOTAO getBotaoMarcaTexto();
     BOTAO getBotaoBalde();
     BOTAO getBotaoBorracha();
+    void alteraBotaoSelecionado(int botaoSelecionado);
     void carregarNomeArquivos();
     void renderSubmenuArquivos();
     void setAbertoSubmenuArquivos(bool aberto, int mouseX, int mouseY);
@@ -87,7 +103,9 @@ public:
     bool verificaClickSubmenu(Submenu submenu, int mouseX, int mouseY);
     std::string verificaArquivoParaAbrir(int mouseX, int mouseY);
     int getBotaoSelecionado();
+    void setBotaoSelecionado(int botaoSelecionado);
     unsigned char *getRGBA();
+    int getRaioCor();
 };
 
 #endif

@@ -11,8 +11,8 @@
 #include <string.h>
 #include "gl_canvas2d.h"
 
-#define posBotoesClick 8/10
-#define larguraBotoesClick 10
+#define posBotoesClick 8.5/10
+#define larguraBotoesClick 46
 #define alturaBotoesClick 30
 #define distanciaEntreBotoesClick 5
 
@@ -32,47 +32,47 @@ Interface::Interface(int screenWidth, int screenHeight)
     qntArquivos = 0;
     carregarNomeArquivos();
 
-    botaoAddImagem.borda1X = inicioMenuLateralX + 10;
+    botaoAddImagem.borda1X = inicioMenuLateralX + 5;
     botaoAddImagem.borda1Y = screenHeight * 9 / 10;
-    botaoAddImagem.borda2X = screenWidth - 10;
+    botaoAddImagem.borda2X = screenWidth - 5;
     botaoAddImagem.borda2Y = botaoAddImagem.borda1Y + 30;
     botaoAddImagem.tem_borda = 1;
 
-    clicar.borda1X = inicioMenuLateralX + 10;
+    clicar.borda1X = inicioMenuLateralX + 5;
     clicar.borda1Y = screenHeight * posBotoesClick;
-    clicar.borda2X = clicar.borda1X + 10;
-    clicar.borda2Y = clicar.borda1Y + 30;
+    clicar.borda2X = clicar.borda1X + larguraBotoesClick;
+    clicar.borda2Y = clicar.borda1Y + alturaBotoesClick;
     clicar.tem_borda = 1;
 
-    pincel.borda1X = clicar.borda2X + 5;
+    pincel.borda1X = clicar.borda2X + distanciaEntreBotoesClick;
     pincel.borda1Y = screenHeight * posBotoesClick;
-    pincel.borda2X = pincel.borda1X + 10;
-    pincel.borda2Y = pincel.borda1Y + 30;
-    pincel.tem_borda = 1;
+    pincel.borda2X = pincel.borda1X + larguraBotoesClick;
+    pincel.borda2Y = pincel.borda1Y + alturaBotoesClick;
+    pincel.tem_borda = 0;
 
-    spray.borda1X = pincel.borda2X + 5;
+    spray.borda1X = pincel.borda2X + distanciaEntreBotoesClick;
     spray.borda1Y = screenHeight * posBotoesClick;
-    spray.borda2X = spray.borda1X + 10;
-    spray.borda2Y = spray.borda1Y + 30;
-    spray.tem_borda = 1;
+    spray.borda2X = spray.borda1X + larguraBotoesClick;
+    spray.borda2Y = spray.borda1Y + alturaBotoesClick;
+    spray.tem_borda = 0;
 
-    marcaTexto.borda1X = spray.borda2X + 5;
+    marcaTexto.borda1X = spray.borda2X + distanciaEntreBotoesClick;
     marcaTexto.borda1Y = screenHeight * posBotoesClick;
-    marcaTexto.borda2X = marcaTexto.borda1X + 10;
-    marcaTexto.borda2Y = marcaTexto.borda1Y + 30;
-    marcaTexto.tem_borda = 1;
+    marcaTexto.borda2X = marcaTexto.borda1X + larguraBotoesClick;
+    marcaTexto.borda2Y = marcaTexto.borda1Y + alturaBotoesClick;
+    marcaTexto.tem_borda = 0;
 
-    balde.borda1X = marcaTexto.borda2X + 5;
+    balde.borda1X = marcaTexto.borda2X + distanciaEntreBotoesClick;
     balde.borda1Y = screenHeight * posBotoesClick;
-    balde.borda2X = balde.borda1X + 10;
-    balde.borda2Y = balde.borda1Y + 30;
-    balde.tem_borda = 1;
+    balde.borda2X = balde.borda1X + larguraBotoesClick;
+    balde.borda2Y = balde.borda1Y + alturaBotoesClick;
+    balde.tem_borda = 0;
 
-    borracha.borda1X = balde.borda2X + 5;
+    borracha.borda1X = balde.borda2X + distanciaEntreBotoesClick;
     borracha.borda1Y = screenHeight * posBotoesClick;
-    borracha.borda2X = borracha.borda1X + 10;
-    borracha.borda2Y = borracha.borda1Y + 30;
-    borracha.tem_borda = 1;
+    borracha.borda2X = borracha.borda1X + larguraBotoesClick;
+    borracha.borda2Y = borracha.borda1Y + alturaBotoesClick;
+    borracha.tem_borda = 0;
 
     botaoSelecionado = 0;
     raioCor = 10;
@@ -151,37 +151,44 @@ bool Interface::verificaClickBotao(BOTAO botao, int mouseX, int mouseY){
 
 void Interface::renderBotaoAdd(){
     renderBotao(botaoAddImagem);
+    CV::color(0.9, 0.9, 0.9);
     CV::text(botaoAddImagem.borda1X + 5, (botaoAddImagem.borda1Y + botaoAddImagem.borda2Y) /2 - 2, "Adicionar uma imagem/camada");
 }
 
 void Interface::renderBotaoClicar(){
     renderBotao(clicar);
-    CV::text(clicar.borda1X + 5, (clicar.borda1Y + clicar.borda2Y) /2 - 2, "Click");
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(clicar.borda1X + 5, (clicar.borda1Y + clicar.borda2Y) /2 - 2, "Clck");
 }
 
 void Interface::renderBotaoPincel(){
     renderBotao(pincel);
+    CV::color(0.9, 0.9, 0.9);
     CV::text(pincel.borda1X + 5, (pincel.borda1Y + pincel.borda2Y) /2 - 2, "Pincel");
 }
 
 void Interface::renderBotaoSpray(){
     renderBotao(spray);
+    CV::color(0.9, 0.9, 0.9);
     CV::text(spray.borda1X + 5, (spray.borda1Y + spray.borda2Y) /2 - 2, "Spray");
 }
 
 void Interface::renderBotaoMarcaTexto(){
     renderBotao(marcaTexto);
-    CV::text(marcaTexto.borda1X + 5, (marcaTexto.borda1Y + marcaTexto.borda2Y) /2 - 2, "Marca Texto");
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(marcaTexto.borda1X + 5, (marcaTexto.borda1Y + marcaTexto.borda2Y) /2 - 2, "marcaTxt");
 }
 
 void Interface::renderBotaoBalde(){
     renderBotao(balde);
+    CV::color(0.9, 0.9, 0.9);
     CV::text(balde.borda1X + 5, (balde.borda1Y + balde.borda2Y) /2 - 2, "Balde");
 }
 
 void Interface::renderBotaoBorracha(){
     renderBotao(borracha);
-    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Borracha");
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Eraser");
 }
 
 BOTAO Interface::getBotaoAddImagem(){
@@ -210,6 +217,37 @@ BOTAO Interface::getBotaoBalde(){
 
 BOTAO Interface::getBotaoBorracha(){
     return borracha;
+}
+
+void Interface::alteraBotaoSelecionado(int botaoSelecionado){
+    this->botaoSelecionado = botaoSelecionado;
+    clicar.tem_borda = 0;
+    pincel.tem_borda = 0;
+    spray.tem_borda = 0;
+    marcaTexto.tem_borda = 0;
+    balde.tem_borda = 0;
+    borracha.tem_borda = 0;
+
+    switch(botaoSelecionado){
+        case 0:
+            clicar.tem_borda = 1;
+            break;
+        case 1:
+            pincel.tem_borda = 1;
+            break;
+        case 2:
+            spray.tem_borda = 1;
+            break;
+        case 3:
+            marcaTexto.tem_borda = 1;
+            break;
+        case 4:
+            balde.tem_borda = 1;
+            break;
+        case 5:
+            borracha.tem_borda = 1;
+            break;
+    }
 }
 
 void Interface::carregarNomeArquivos(){
@@ -281,6 +319,14 @@ int Interface::getBotaoSelecionado(){
     return botaoSelecionado;
 }
 
+void Interface::setBotaoSelecionado(int botaoSelecionado){
+    this->botaoSelecionado = botaoSelecionado;
+}
+
 unsigned char *Interface::getRGBA(){
     return RGBA;
+}
+
+int Interface::getRaioCor(){
+    return raioCor;
 }

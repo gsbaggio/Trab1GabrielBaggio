@@ -11,6 +11,7 @@
 #include <string.h>
 #include "gl_canvas2d.h"
 #include <vector>
+#include <stdlib.h>
 
 gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight)
 {
@@ -189,20 +190,93 @@ bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){
     return 0;
 }
 
-void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGBA){
-    int posX, posY, posRGBA;
-    posX = mouseX - borda1X;
-    posY = mouseY - borda1Y;
-    posRGBA = (posY * width + posX) * 4;
-    unsigned char r = RGBA[0];
-    unsigned char g = RGBA[1];
-    unsigned char b = RGBA[2];
-    unsigned char a = RGBA[3];
-    if(posX < 0 || posX >= width || posY < 0 || posY >= height){
+void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGBA, int tipoPintura, int raio){
+    if(tipoPintura == 1){ // pincel
+        for(int i = -raio; i <= raio; i++){
+            for(int j = -raio; j <= raio; j++){
+                if(i*i + j*j <= raio*raio){
+                    int posX = mouseX + i - borda1X;
+                    int posY = mouseY + j - borda1Y;
+                    int posRGBA = (posY * width + posX) * 4;
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
+                    }
+                }
+            }
+        }
         return;
     }
-    camadas[camadaAtiva].camada[posRGBA] = r;
-    camadas[camadaAtiva].camada[posRGBA + 1] = g;
-    camadas[camadaAtiva].camada[posRGBA + 2] = b;
-    camadas[camadaAtiva].camada[posRGBA + 3] = a;
+    else if(tipoPintura == 2){ // spray
+        for(int i = -raio; i <= raio; i++){
+            for(int j = -raio; j <= raio; j++){
+                if(i*i + j*j <= raio*raio){
+                    int posX = mouseX + i - borda1X;
+                    int posY = mouseY + j - borda1Y;
+                    int posRGBA = (posY * width + posX) * 4;
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
+                    }
+                }
+            }
+        }
+        return;
+    }
+    else if(tipoPintura == 3){ // marca texto
+        for(int i = -raio; i <= raio; i++){
+            for(int j = -raio; j <= raio; j++){
+                if(i*i + j*j <= raio*raio){
+                    int posX = mouseX + i - borda1X;
+                    int posY = mouseY + j - borda1Y;
+                    int posRGBA = (posY * width + posX) * 4;
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
+                    }
+                }
+            }
+        }
+        return;
+    }
+    else if(tipoPintura == 4){ // balde
+        for(int i = -raio; i <= raio; i++){
+            for(int j = -raio; j <= raio; j++){
+                if(i*i + j*j <= raio*raio){
+                    int posX = mouseX + i - borda1X;
+                    int posY = mouseY + j - borda1Y;
+                    int posRGBA = (posY * width + posX) * 4;
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
+                    }
+                }
+            }
+        }
+    }
+    else if(tipoPintura == 5){ // borracha
+        for(int i = -raio; i <= raio; i++){
+            for(int j = -raio; j <= raio; j++){
+                if(i*i + j*j <= raio*raio){
+                    int posX = mouseX + i - borda1X;
+                    int posY = mouseY + j - borda1Y;
+                    int posRGBA = (posY * width + posX) * 4;
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                        camadas[camadaAtiva].camada[posRGBA] = 1;
+                        camadas[camadaAtiva].camada[posRGBA + 1] = 1;
+                        camadas[camadaAtiva].camada[posRGBA + 2] = 1;
+                        camadas[camadaAtiva].camada[posRGBA + 3] = 0;
+                    }
+                }
+            }
+        }
+    }
 }

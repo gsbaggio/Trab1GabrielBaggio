@@ -48,7 +48,6 @@ void carregarImagemNaCamada(char *nome_arquivo){
 
 void render()
 {
-    int pos;
     interface->render(screenWidth, screenHeight);
 
     gCamadas->render();
@@ -101,6 +100,24 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(gCamadas->verificaBotaoAtiva(mouseX, mouseY)){
 
         }
+        else if(interface->verificaClickBotao(interface->getBotaoClicar(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(0);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoPincel(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(1);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoSpray(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(2);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoMarcaTexto(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(3);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoBalde(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(4);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoBorracha(), mouseX, mouseY)){
+            interface->alteraBotaoSelecionado(5);
+        }
         gCamadas->setPintando(0);
     }
     else if(button == 0 && state == 0){
@@ -111,16 +128,19 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
 
     if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
         if(interface->getBotaoSelecionado() == 1){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA());
+            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 1, interface->getRaioCor());
         }
         else if(interface->getBotaoSelecionado() == 2){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA());
+            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 2, interface->getRaioCor());
         }
         else if(interface->getBotaoSelecionado() == 3){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA());
+            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 3, interface->getRaioCor());
         }
         else if(interface->getBotaoSelecionado() == 4){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA());
+            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 4, interface->getRaioCor());
+        }
+        else if(interface->getBotaoSelecionado() == 5){
+            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 5, interface->getRaioCor());
         }
     }
     printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
