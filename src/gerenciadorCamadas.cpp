@@ -12,6 +12,7 @@
 #include "gl_canvas2d.h"
 #include <vector>
 #include <stdlib.h>
+#include <time.h>
 
 #define MAX_CAMADAS 10
 
