@@ -128,6 +128,7 @@ public:
     void mudaValorSliderG(int valor);
     void mudaValorSliderB(int valor);
     void mudaValorSliderRaio(int valor);
+    void renderPreviewCor(int screenWidth);
 };
 
 #endif

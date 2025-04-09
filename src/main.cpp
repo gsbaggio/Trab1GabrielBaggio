@@ -100,6 +100,12 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(gCamadas->verificaBotaoAtiva(mouseX, mouseY)){
 
         }
+        else if(gCamadas->verificaBotaoCima(mouseX, mouseY)){
+
+        }
+        else if(gCamadas->verificaBotaoBaixo(mouseX, mouseY)){
+            
+        }
         else if(interface->verificaClickBotao(interface->getBotaoClicar(), mouseX, mouseY)){
             interface->alteraBotaoSelecionado(0);
         }
@@ -179,7 +185,7 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
 int main(void)
 {
     interface = new Interface(screenWidth, screenHeight);
-    gCamadas = new gerenciadorCamadas(interface->getGrossuraBordasLaterais(), interface->getBordaMenuLateralX(), screenHeight);
+    gCamadas = new gerenciadorCamadas(interface->getGrossuraBordasLaterais(), interface->getBordaMenuLateralX(), screenHeight, screenWidth, interface->getBordaMenuLateralX());
 
 
     CV::init(&screenWidth, &screenHeight, "Gabriel Baggio Image Manipulation Program (GBIMP)");

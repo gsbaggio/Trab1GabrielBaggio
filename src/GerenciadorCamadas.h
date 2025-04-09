@@ -44,11 +44,12 @@ private:
     int camadaAtiva;
     int qntCamadas;
     bool pintando;
+    int caixaBotoes1X, caixaBotoes1Y, caixaBotoes2X, caixaBotoes2Y;
     std::vector<Camada> camadas;
     std::vector<BotaoCamadas> botaoCamadas;
 
 public:
-   gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight);
+   gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight, int screenWidth, int inicioMenuLateralX);
    void render();
    void carregaCamada(unsigned char *data, int imgWidth, int imgHeight);
    bool verificaMouseCamada(int mouseX, int mouseY);
@@ -57,9 +58,12 @@ public:
    void addBotaoCamada(int qntCamadas, int screenWidth, int screenHeight, int inicioMenuLateralX);
    void renderBotaoSwitch(BotaoSwitch botaoSwitch);
    void renderBotaoCamada();
+   void renderCaixaCamadas();
    int getQntCamadas();
    bool verificaBotaoHide(int mouseX, int mouseY);
    bool verificaBotaoAtiva(int mouseX, int mouseY);
+   bool verificaBotaoCima(int mouseX, int mouseY);
+   bool verificaBotaoBaixo(int mouseX, int mouseY);
    void pintarCamada(int mouseX, int mouseY, unsigned char *RGBA, int tipoPintura, int raio);
 };
 

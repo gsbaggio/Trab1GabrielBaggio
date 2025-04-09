@@ -13,7 +13,9 @@
 #include <vector>
 #include <stdlib.h>
 
-gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight)
+#define MAX_CAMADAS 10
+
+gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight, int screenWidth, int inicioMenuLateralX)
 {
     borda1X = grossuraBordasLateraisNasCamadas;
     borda1Y = grossuraBordasLateraisNasCamadas;
@@ -21,6 +23,11 @@ gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int
     borda2Y = screenHeight - grossuraBordasLateraisNasCamadas;
     width = borda2X - borda1X;
     height = borda2Y - borda1Y;
+
+    caixaBotoes1X = inicioMenuLateralX + 13;
+    caixaBotoes1Y = 15;
+    caixaBotoes2X = screenWidth - 5;
+    caixaBotoes2Y = (screenHeight / 20) * (MAX_CAMADAS) + 20;
     pintando = 0;
     qntCamadas = 0;
 }
@@ -76,6 +83,7 @@ void gerenciadorCamadas::render(){
         }
     }
     renderBotaoCamada();
+    renderCaixaCamadas();
 }
 
 bool gerenciadorCamadas::verificaMouseCamada(int mouseX, int mouseY){
@@ -161,6 +169,11 @@ void gerenciadorCamadas::renderBotaoCamada(){
     }
 }
 
+void gerenciadorCamadas::renderCaixaCamadas(){
+    CV::color(0.9, 0.9, 0.9);
+    CV::rect(caixaBotoes1X, caixaBotoes1Y, caixaBotoes2X, caixaBotoes2Y);
+}
+
 int gerenciadorCamadas::getQntCamadas(){
     return qntCamadas;
 }
@@ -185,6 +198,61 @@ bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){
         if(mouseX > botaoCamada.borda1X && mouseX < botaoCamada.bordaHideX && mouseY > botaoCamada.borda1Y && mouseY < botaoCamada.borda2Y){
             camadaAtiva = botaoCamada.posCamada;
             return 1;
+        }
+    }
+    return 0;
+}
+
+bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){
+    for(BotaoCamadas botaoCamada : botaoCamadas){
+        if(mouseX > botaoCamada.moveCima.borda1X && mouseX < botaoCamada.moveCima.borda2X && mouseY > botaoCamada.moveCima.borda1Y && mouseY < botaoCamada.moveCima.borda2Y){
+            if(botaoCamada.posCamada < qntCamadas - 1){
+                Camada temp = camadas[botaoCamada.posCamada];
+                BotaoCamadas temp2 = botaoCamadas[botaoCamada.posCamada];
+
+                camadas[botaoCamada.posCamada] = camadas[botaoCamada.posCamada + 1];
+                camadas[botaoCamada.posCamada + 1] = temp;
+                botaoCamadas[botaoCamada.posCamada] = botaoCamadas[botaoCamada.posCamada + 1];
+                botaoCamadas[botaoCamada.posCamada + 1] = temp2;
+
+                
+                
+                if(camadaAtiva == botaoCamada.posCamada){
+                    camadaAtiva++;
+                }
+                else if(camadaAtiva == botaoCamada.posCamada + 1){
+                    camadaAtiva--;
+                }
+                return 1;
+            }
+            
+        }
+    }
+    return 0;
+}
+
+bool gerenciadorCamadas::verificaBotaoBaixo(int mouseX, int mouseY){
+    for(BotaoCamadas botaoCamada : botaoCamadas){
+        if(mouseX > botaoCamada.moveBaixo.borda1X && mouseX < botaoCamada.moveBaixo.borda2X && mouseY > botaoCamada.moveBaixo.borda1Y && mouseY < botaoCamada.moveBaixo.borda2Y){
+            if(botaoCamada.posCamada > 0){
+                Camada temp = camadas[botaoCamada.posCamada];
+                BotaoCamadas temp2 = botaoCamadas[botaoCamada.posCamada];
+
+
+                camadas[botaoCamada.posCamada] = camadas[botaoCamada.posCamada - 1];
+                camadas[botaoCamada.posCamada - 1] = temp;
+                botaoCamadas[botaoCamada.posCamada] = botaoCamadas[botaoCamada.posCamada - 1];
+                botaoCamadas[botaoCamada.posCamada - 1] = temp2;
+
+                if(camadaAtiva == botaoCamada.posCamada){
+                    camadaAtiva--;
+                }
+                else if(camadaAtiva == botaoCamada.posCamada - 1){
+                    camadaAtiva++;
+                }
+                return 1;
+            }
+            
         }
     }
     return 0;

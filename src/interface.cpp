@@ -75,7 +75,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     borracha.tem_borda = 0;
 
     sliderR.inicioX = inicioMenuLateralX + 5;
-    sliderR.fimX = balde.borda2X;
+    sliderR.fimX = balde.borda2X - 10;
     sliderR.Y = screenHeight * 8 / 10;
     sliderR.valorMinimo = 0;
     sliderR.valorMaximo = 255;
@@ -83,7 +83,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     sliderR.segurando = 0;
 
     sliderG.inicioX = inicioMenuLateralX + 5;
-    sliderG.fimX = balde.borda2X;
+    sliderG.fimX = balde.borda2X - 10;
     sliderG.Y = sliderR.Y - 30;
     sliderG.valorMinimo = 0;
     sliderG.valorMaximo = 255;
@@ -91,7 +91,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     sliderG.segurando = 0;
 
     sliderB.inicioX = inicioMenuLateralX + 5;
-    sliderB.fimX = balde.borda2X;
+    sliderB.fimX = balde.borda2X - 10;
     sliderB.Y = sliderG.Y - 30;
     sliderB.valorMinimo = 0;
     sliderB.valorMaximo = 255;
@@ -99,7 +99,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     sliderB.segurando = 0;
 
     sliderRaio.inicioX = inicioMenuLateralX + 5;
-    sliderRaio.fimX = balde.borda2X;
+    sliderRaio.fimX = balde.borda2X - 10;
     sliderRaio.Y = sliderB.Y - 30;
     sliderRaio.valorMinimo = 1;
     sliderRaio.valorMaximo = 50;
@@ -134,6 +134,7 @@ void Interface::render(int screenWidth, int screenHeight){
     renderSliderG();
     renderSliderB();
     renderSliderRaio();
+    renderPreviewCor(screenWidth);
 
     if(submenuArquivos.aberto){
         renderSubmenuArquivos();
@@ -200,31 +201,31 @@ void Interface::renderBotaoClicar(){
 void Interface::renderBotaoPincel(){
     renderBotao(pincel);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(pincel.borda1X + 5, (pincel.borda1Y + pincel.borda2Y) /2 - 2, "Pincel");
+    CV::text(pincel.borda1X + 5, (pincel.borda1Y + pincel.borda2Y) /2 - 2, "Pncl");
 }
 
 void Interface::renderBotaoSpray(){
     renderBotao(spray);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(spray.borda1X + 5, (spray.borda1Y + spray.borda2Y) /2 - 2, "Spray");
+    CV::text(spray.borda1X + 5, (spray.borda1Y + spray.borda2Y) /2 - 2, "Spry");
 }
 
 void Interface::renderBotaoMarcaTexto(){
     renderBotao(marcaTexto);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(marcaTexto.borda1X + 5, (marcaTexto.borda1Y + marcaTexto.borda2Y) /2 - 2, "marcaTxt");
+    CV::text(marcaTexto.borda1X + 5, (marcaTexto.borda1Y + marcaTexto.borda2Y) /2 - 2, "mcTx");
 }
 
 void Interface::renderBotaoBalde(){
     renderBotao(balde);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(balde.borda1X + 5, (balde.borda1Y + balde.borda2Y) /2 - 2, "Balde");
+    CV::text(balde.borda1X + 5, (balde.borda1Y + balde.borda2Y) /2 - 2, "Blde");
 }
 
 void Interface::renderBotaoBorracha(){
     renderBotao(borracha);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Eraser");
+    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Eras");
 }
 
 BOTAO Interface::getBotaoAddImagem(){
@@ -369,7 +370,7 @@ int Interface::getRaioCor(){
 
 void Interface::renderSlider(Slider slider){
     CV::color(0.3, 0.3, 0.3);
-    CV::rectFill(slider.inicioX, slider.Y, slider.fimX, slider.Y + 10);
+    CV::rectFill(slider.inicioX, slider.Y, slider.fimX + 10, slider.Y + 10);
     CV::color(0.9, 0.9, 0.9);
     CV::rectFill(slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo), slider.Y, slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo) + 10, slider.Y + 10);
 }
@@ -401,7 +402,7 @@ void Interface::renderSliderRaio(){
 }
 
 bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){
-    if(mouseX > slider.inicioX && mouseX < slider.fimX && mouseY > slider.Y && mouseY < slider.Y + 10){
+    if(mouseX > slider.inicioX && mouseX < slider.fimX + 10 && mouseY > slider.Y && mouseY < slider.Y + 10){
         return 1;
     }
     return 0;
@@ -495,4 +496,11 @@ void Interface::mudaValorSliderRaio(int mouseX){
     }
     sliderRaio.valorAtual = valor;
     raioCor = valor;
+}
+
+void Interface::renderPreviewCor(int screenWidth){
+    CV::color(0.3, 0.3, 0.3);
+    CV::rect(sliderRaio.fimX + 15, sliderRaio.Y, screenWidth - 5, sliderR.Y + 15);
+    CV::color((float)RGBA[0] / 255, (float)RGBA[1] / 255, (float)RGBA[2] / 255);
+    CV::rectFill(sliderRaio.fimX + 15, sliderRaio.Y, screenWidth - 5, sliderR.Y + 15);
 }
