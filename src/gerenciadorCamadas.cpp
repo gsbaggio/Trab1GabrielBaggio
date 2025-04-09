@@ -123,7 +123,7 @@ void gerenciadorCamadas::addBotaoCamada(int camadaAtiva, int screenWidth, int sc
 
     novoBotao.posCamada = camadaAtiva;
     char nome[50];
-    sprintf(nome, "Camada %d", camadaAtiva + 1);
+    sprintf(nome, "Camada Posicao %d", camadaAtiva + 1);
     strcpy(novoBotao.nome, nome);
     botaoCamadas.push_back(novoBotao);
 }
@@ -214,9 +214,6 @@ bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){
                 camadas[botaoCamada.posCamada + 1] = temp;
                 botaoCamadas[botaoCamada.posCamada] = botaoCamadas[botaoCamada.posCamada + 1];
                 botaoCamadas[botaoCamada.posCamada + 1] = temp2;
-
-                
-                
                 if(camadaAtiva == botaoCamada.posCamada){
                     camadaAtiva++;
                 }

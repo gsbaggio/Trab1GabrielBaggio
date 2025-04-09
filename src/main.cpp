@@ -83,7 +83,7 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
                 interface->setAbertoSubmenuArquivos(0, 0, 0);
             }
             else{
-                char nome_arquivo[512]; // Buffer grande o suficiente
+                char nome_arquivo[512]; 
                 std::string nomeArquivoRetornado = (interface->verificaArquivoParaAbrir(mouseX, mouseY).c_str());
                 sprintf(nome_arquivo, ".\\Trab1GabrielBaggio\\images\\%s", nomeArquivoRetornado.c_str());
                 carregarImagemNaCamada(nome_arquivo);
@@ -104,7 +104,7 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
 
         }
         else if(gCamadas->verificaBotaoBaixo(mouseX, mouseY)){
-            
+
         }
         else if(interface->verificaClickBotao(interface->getBotaoClicar(), mouseX, mouseY)){
             interface->alteraBotaoSelecionado(0);
@@ -149,21 +149,7 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
     }
 
     if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
-        if(interface->getBotaoSelecionado() == 1){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 1, interface->getRaioCor());
-        }
-        else if(interface->getBotaoSelecionado() == 2){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 2, interface->getRaioCor());
-        }
-        else if(interface->getBotaoSelecionado() == 3){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 3, interface->getRaioCor());
-        }
-        else if(interface->getBotaoSelecionado() == 4){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 4, interface->getRaioCor());
-        }
-        else if(interface->getBotaoSelecionado() == 5){
-            gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), 5, interface->getRaioCor());
-        }
+        gCamadas->pintarCamada(mouseX, mouseY, interface->getRGBA(), interface->getBotaoSelecionado(), interface->getRaioCor());
     }
 
     if(interface->getSegurandoR()){
