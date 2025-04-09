@@ -40,9 +40,9 @@ void gerenciadorCamadas::carregaCamada(unsigned char *data, int imgWidth, int im
     for(i = 0; i < height; i++){
         for(j = 0; j < width; j++){
             posRGBA = (i * width + j) * 4;
-            novaCamada.camada[posRGBA] = 1;
-            novaCamada.camada[posRGBA + 1] = 1;
-            novaCamada.camada[posRGBA + 2] = 1;
+            novaCamada.camada[posRGBA] = 255;
+            novaCamada.camada[posRGBA + 1] = 255;
+            novaCamada.camada[posRGBA + 2] = 255;
             novaCamada.camada[posRGBA + 3] = 0;
         }
     }
@@ -276,35 +276,54 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
         return;
     }
     else if(tipoPintura == 2){ // spray
-        for(int i = -raio; i <= raio; i++){
-            for(int j = -raio; j <= raio; j++){
-                if(i*i + j*j <= raio*raio){
-                    int posX = mouseX + i - borda1X;
-                    int posY = mouseY + j - borda1Y;
-                    int posRGBA = (posY * width + posX) * 4;
-                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
-                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
-                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
-                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
-                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
-                    }
+        srand(time(NULL) + mouseX + mouseY); 
+        
+        int numPoints = raio * raio / 2; 
+        for(int p = 0; p < numPoints; p++){
+            int i, j;
+            do {
+                i = (rand() % (2 * raio)) - raio;
+                j = (rand() % (2 * raio)) - raio;
+            } while(i*i + j*j > raio*raio);
+            
+            if(rand() % 100 > 60){ 
+                int posX = mouseX + i - borda1X;
+                int posY = mouseY + j - borda1Y;
+                int posRGBA = (posY * width + posX) * 4;
+                if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                    camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                    camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                    camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                    camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
                 }
             }
         }
         return;
     }
     else if(tipoPintura == 3){ // marca texto
-        for(int i = -raio; i <= raio; i++){
-            for(int j = -raio; j <= raio; j++){
-                if(i*i + j*j <= raio*raio){
+        int alturaHighlight = raio * 5; 
+        int larguraHighlight = 2; 
+        
+        for(int i = -larguraHighlight; i <= larguraHighlight; i++){
+            for(int j = -alturaHighlight; j <= alturaHighlight; j++){
+                if(i >= -larguraHighlight && i <= larguraHighlight && 
+                   j >= -alturaHighlight && j <= alturaHighlight) {
+                    
                     int posX = mouseX + i - borda1X;
                     int posY = mouseY + j - borda1Y;
                     int posRGBA = (posY * width + posX) * 4;
+                    
                     if(posX >= 0 && posX < width && posY >= 0 && posY < height){
-                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
-                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
-                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
-                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
+                        if(camadas[camadaAtiva].camada[posRGBA + 3] == 1){
+                            camadas[camadaAtiva].camada[posRGBA] = (camadas[camadaAtiva].camada[posRGBA] * 0.7 + RGBA[0] * 0.3);
+                            camadas[camadaAtiva].camada[posRGBA + 1] = (camadas[camadaAtiva].camada[posRGBA + 1] * 0.7 + RGBA[1] * 0.3);
+                            camadas[camadaAtiva].camada[posRGBA + 2] = (camadas[camadaAtiva].camada[posRGBA + 2] * 0.7 + RGBA[2] * 0.3);
+                        } else {
+                            camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
+                            camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                            camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                            camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3]; 
+                        }
                     }
                 }
             }
