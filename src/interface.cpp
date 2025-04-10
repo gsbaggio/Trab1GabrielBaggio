@@ -107,29 +107,43 @@ Interface::Interface(int screenWidth, int screenHeight)
     sliderRaio.segurando = 0;
 
     sliderBrilho.inicioX = inicioMenuLateralX + 5;
-    sliderBrilho.fimX = balde.borda2X - 50;
-    sliderBrilho.Y = sliderRaio.Y - 30;
+    sliderBrilho.fimX = balde.borda2X - 60;
+    sliderBrilho.Y = sliderRaio.Y - 35;
     sliderBrilho.valorMinimo = -255;
     sliderBrilho.valorMaximo = 255;
     sliderBrilho.valorAtual = 0;
     sliderBrilho.segurando = 0;
 
+    sliderGama.inicioX = inicioMenuLateralX + 5;
+    sliderGama.fimX = balde.borda2X - 60;
+    sliderGama.Y = sliderBrilho.Y - 35;
+    sliderGama.valorMinimo = 2;
+    sliderGama.valorMaximo = 50;
+    sliderGama.valorAtual = 10;
+    sliderGama.segurando = 0;
+
+    addBrilho.borda1X = sliderBrilho.fimX + 15;
+    addBrilho.borda1Y = sliderBrilho.Y;
+    addBrilho.borda2X = addBrilho.borda1X + larguraBotoesClick;
+    addBrilho.borda2Y = sliderBrilho.Y + alturaBotoesClick;
+    addBrilho.tem_borda = 1;
+
     fliperVertical.borda1X = sliderRaio.fimX + 15;
     fliperVertical.borda1Y = sliderRaio.Y - 35;
-    fliperVertical.borda2X = screenWidth - 5;
-    fliperVertical.borda2Y = fliperVertical.borda1Y + 30;
+    fliperVertical.borda2X = fliperVertical.borda1X + larguraBotoesClick;
+    fliperVertical.borda2Y = fliperVertical.borda1Y + alturaBotoesClick;
     fliperVertical.tem_borda = 1;
 
     fliperHorizontal.borda1X = sliderRaio.fimX + 15;
     fliperHorizontal.borda1Y = fliperVertical.borda1Y - 35;
-    fliperHorizontal.borda2X = screenWidth - 5;
-    fliperHorizontal.borda2Y = fliperHorizontal.borda1Y + 30;
+    fliperHorizontal.borda2X = fliperHorizontal.borda1X + larguraBotoesClick;
+    fliperHorizontal.borda2Y = fliperHorizontal.borda1Y + alturaBotoesClick;
     fliperHorizontal.tem_borda = 1;
 
-    tonsCinza.borda1X = sliderRaio.fimX;
-    tonsCinza.borda1Y = fliperHorizontal.borda1Y - 33;
+    tonsCinza.borda1X = sliderRaio.fimX + 15;
+    tonsCinza.borda1Y = fliperHorizontal.borda1Y - 35;
     tonsCinza.borda2X = screenWidth - 5;
-    tonsCinza.borda2Y = tonsCinza.borda1Y + 30;
+    tonsCinza.borda2Y = tonsCinza.borda1Y + alturaBotoesClick;
     tonsCinza.tem_borda = 1;
 
     botaoSelecionado = 0;
@@ -161,6 +175,8 @@ void Interface::render(int screenWidth, int screenHeight){
     renderSliderB();
     renderSliderRaio();
     renderSliderBrilho();
+    renderSliderGama();
+    renderBotaoAddBrilho();
     renderBotaoVertical();
     renderBotaoHorizontal();
     renderBotaoCinza();
@@ -255,7 +271,7 @@ void Interface::renderBotaoBalde(){
 void Interface::renderBotaoBorracha(){
     renderBotao(borracha);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Eras");
+    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Lmpa");
 }
 
 void Interface::renderBotaoVertical(){
@@ -273,7 +289,14 @@ void Interface::renderBotaoHorizontal(){
 void Interface::renderBotaoCinza() {
     renderBotao(tonsCinza);
     CV::color(0.9, 0.9, 0.9);
-    CV::text(tonsCinza.borda1X + 5, (tonsCinza.borda1Y + tonsCinza.borda2Y)/2 - 2, "Cinza");
+    CV::text(tonsCinza.borda1X + 5, (tonsCinza.borda1Y + tonsCinza.borda2Y)/2 - 2, "Gray");
+}
+
+void Interface::renderBotaoAddBrilho(){
+    renderBotao(addBrilho);
+    CV::color(0.9, 0.9, 0.9);
+    CV::rectFill(addBrilho.borda1X + 5, (addBrilho.borda1Y + addBrilho.borda2Y) /2 - 2, addBrilho.borda2X - 5, (addBrilho.borda1Y + addBrilho.borda2Y) /2 + 2);
+    CV::rectFill((addBrilho.borda1X + addBrilho.borda2X) / 2 - 2, addBrilho.borda1Y + 5, (addBrilho.borda1X + addBrilho.borda2X) / 2 + 2, addBrilho.borda2Y - 5);
 }
 
 BOTAO Interface::getBotaoAddImagem(){
@@ -314,6 +337,10 @@ BOTAO Interface::getBotaoHorizontal(){
 
 BOTAO Interface::getBotaoCinza(){
     return tonsCinza;
+}
+
+BOTAO Interface::getBotaoAddBrilho(){
+    return addBrilho;
 }
 
 void Interface::alteraBotaoSelecionado(int botaoSelecionado){
@@ -467,6 +494,13 @@ void Interface::renderSliderBrilho(){
     CV::text(sliderBrilho.fimX - 30, sliderBrilho.Y + 15, std::to_string(sliderBrilho.valorAtual).c_str());
 }
 
+void Interface::renderSliderGama(){
+    renderSlider(sliderGama);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderGama.inicioX, sliderGama.Y + 15, "Gama: ");
+    CV::text(sliderGama.fimX - 30, sliderGama.Y + 15, std::to_string((sliderGama.valorAtual / 10.0)).c_str());
+}
+
 bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){
     if(mouseX > slider.inicioX && mouseX < slider.fimX + 10 && mouseY > slider.Y && mouseY < slider.Y + 10){
         return 1;
@@ -487,6 +521,14 @@ Slider Interface::getSliderRaio(){
     return sliderRaio;
 }
 
+Slider Interface::getSliderBrilho(){
+    return sliderBrilho;
+}
+
+Slider Interface::getSliderGama(){
+    return sliderGama;
+}
+
 void Interface::setSegurandoR(bool segurando){
     sliderR.segurando = segurando;
 }
@@ -498,6 +540,14 @@ void Interface::setSegurandoB(bool segurando){
 }
 void Interface::setSegurandoRaio(bool segurando){
     sliderRaio.segurando = segurando;
+}
+
+void Interface::setSegurandoBrilho(bool segurando){
+    sliderBrilho.segurando = segurando;
+}
+
+void Interface::setSegurandoGama(bool segurando){
+    sliderGama.segurando = segurando;
 }
 
 bool Interface::getSegurandoR(){
@@ -516,13 +566,29 @@ bool Interface::getSegurandoRaio(){
     return sliderRaio.segurando;
 }
 
+bool Interface::getSegurandoBrilho(){
+    return sliderBrilho.segurando;
+}
+
+bool Interface::getSegurandoGama(){
+    return sliderGama.segurando;
+}
+
+int Interface::getValorBrilho(){
+    return sliderBrilho.valorAtual;
+}
+
+int Interface::getValorGama(){
+    return sliderGama.valorAtual;
+}
+
 void Interface::mudaValorSliderR(int mouseX){
     int valor = (sliderR.valorMaximo - sliderR.valorMinimo) * (mouseX - sliderR.inicioX) / (sliderR.fimX - sliderR.inicioX) + sliderR.valorMinimo;
     if(valor > sliderR.valorMaximo){
-        valor = 255;
+        valor = sliderR.valorMaximo;
     }
     if(valor < sliderR.valorMinimo){
-        valor = 0;
+        valor = sliderR.valorMinimo;
     }
     sliderR.valorAtual = valor;
     RGBA[0] = valor;
@@ -531,10 +597,10 @@ void Interface::mudaValorSliderR(int mouseX){
 void Interface::mudaValorSliderG(int mouseX){
     int valor = (sliderG.valorMaximo - sliderG.valorMinimo) * (mouseX - sliderG.inicioX) / (sliderG.fimX - sliderG.inicioX) + sliderG.valorMinimo;
     if(valor > sliderG.valorMaximo){
-        valor = 255;
+        valor = sliderG.valorMaximo;
     }
     if(valor < sliderG.valorMinimo){
-        valor = 0;
+        valor = sliderG.valorMinimo;
     }
     sliderG.valorAtual = valor;
     RGBA[1] = valor;
@@ -543,10 +609,10 @@ void Interface::mudaValorSliderG(int mouseX){
 void Interface::mudaValorSliderB(int mouseX){
     int valor = (sliderB.valorMaximo - sliderB.valorMinimo) * (mouseX - sliderB.inicioX) / (sliderB.fimX - sliderB.inicioX) + sliderB.valorMinimo;
     if(valor > sliderB.valorMaximo){
-        valor = 255;
+        valor = sliderB.valorMaximo;
     }
     if(valor < sliderB.valorMinimo){
-        valor = 0;
+        valor = sliderB.valorMinimo;
     }
     sliderB.valorAtual = valor;
     RGBA[2] = valor;
@@ -555,13 +621,35 @@ void Interface::mudaValorSliderB(int mouseX){
 void Interface::mudaValorSliderRaio(int mouseX){
     int valor = (sliderRaio.valorMaximo - sliderRaio.valorMinimo) * (mouseX - sliderRaio.inicioX) / (sliderRaio.fimX - sliderRaio.inicioX) + sliderRaio.valorMinimo;
     if(valor > sliderRaio.valorMaximo){
-        valor = 50;
+        valor = sliderRaio.valorMaximo;
     }
     if(valor < sliderRaio.valorMinimo){
-        valor = 1;
+        valor = sliderRaio.valorMinimo;
     }
     sliderRaio.valorAtual = valor;
     raioCor = valor;
+}
+
+void Interface::mudaValorSliderBrilho(int mouseX){
+    int valor = (sliderBrilho.valorMaximo - sliderBrilho.valorMinimo) * (mouseX - sliderBrilho.inicioX) / (sliderBrilho.fimX - sliderBrilho.inicioX) + sliderBrilho.valorMinimo;
+    if(valor > sliderBrilho.valorMaximo){
+        valor = sliderBrilho.valorMaximo;
+    }
+    if(valor < sliderBrilho.valorMinimo){
+        valor = sliderBrilho.valorMinimo;
+    }
+    sliderBrilho.valorAtual = valor;
+}
+
+void Interface::mudaValorSliderGama(int mouseX){
+    int valor = (sliderGama.valorMaximo - sliderGama.valorMinimo) * (mouseX - sliderGama.inicioX) / (sliderGama.fimX - sliderGama.inicioX) + sliderGama.valorMinimo;
+    if(valor > sliderGama.valorMaximo){
+        valor = sliderGama.valorMaximo;
+    }
+    if(valor < sliderGama.valorMinimo){
+        valor = sliderGama.valorMinimo;
+    }
+    sliderGama.valorAtual = valor;
 }
 
 void Interface::renderPreviewCor(int screenWidth){

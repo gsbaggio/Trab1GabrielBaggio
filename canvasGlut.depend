@@ -144,7 +144,7 @@
 
 1589217858 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\vector2.h
 
-1744295746 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
+1744300672 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
 	"GerenciadorCamadas.h"
 	<string.h>
 	"gl_canvas2d.h"
@@ -152,7 +152,7 @@
 	<stdlib.h>
 	<time.h>
 
-1744295714 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.h
+1744300697 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.h
 	<stdio.h>
 	<stdlib.h>
 	<vector>
@@ -161,19 +161,19 @@
 	"gl_canvas2d.h"
 	<GL/glut.h>
 
-1744293665 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.cpp
+1744300500 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.cpp
 	"Interface.h"
 	<string.h>
 	"gl_canvas2d.h"
 
-1744296307 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.h
+1744302354 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\interface.h
 	<stdio.h>
 	<stdlib.h>
 	<vector>
 	<string>
 	<dirent.h>
 
-1744295705 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\main.cpp
+1744302253 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\main.cpp
 	<GL/glut.h>
 	<GL/freeglut_ext.h>
 	<math.h>

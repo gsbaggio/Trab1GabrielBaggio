@@ -127,6 +127,9 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(interface->verificaClickBotao(interface->getBotaoBorracha(), mouseX, mouseY)){
             interface->alteraBotaoSelecionado(5);
         }
+        else if(interface->verificaClickBotao(interface->getBotaoAddBrilho(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+            gCamadas->adicionarBrilho(interface->getValorBrilho());
+        }
         else if(interface->verificaClickBotao(interface->getBotaoVertical(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
             gCamadas->flipVertical();
         }
@@ -141,6 +144,8 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         interface->setSegurandoG(0);
         interface->setSegurandoB(0);
         interface->setSegurandoRaio(0);
+        interface->setSegurandoBrilho(0);
+        interface->setSegurandoGama(0);
     }
     else if(button == 0 && state == 0){
         if(gCamadas->verificaMouseCamada(mouseX, mouseY)){
@@ -157,6 +162,12 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         }
         else if(interface->verificaSegurandoSlider(interface->getSliderRaio(), mouseX, mouseY)){
             interface->setSegurandoRaio(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderBrilho(), mouseX, mouseY)){
+            interface->setSegurandoBrilho(1);
+        }
+        else if(interface->verificaSegurandoSlider(interface->getSliderGama(), mouseX, mouseY)){
+            interface->setSegurandoGama(1);
         }
     }
 
@@ -175,6 +186,12 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
     }
     else if(interface->getSegurandoRaio()){
         interface->mudaValorSliderRaio(mouseX);
+    }
+    else if(interface->getSegurandoBrilho()){
+        interface->mudaValorSliderBrilho(mouseX);
+    }
+    else if(interface->getSegurandoGama()){
+        interface->mudaValorSliderGama(mouseX);
     }
     printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 

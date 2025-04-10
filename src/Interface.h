@@ -61,6 +61,9 @@ private:
     Slider sliderRaio;
 
     Slider sliderBrilho;
+    BOTAO addBrilho;
+    Slider sliderGama;
+
     BOTAO fliperVertical;
     BOTAO fliperHorizontal;
 
@@ -93,6 +96,7 @@ public:
     void renderBotaoVertical();
     void renderBotaoHorizontal();
     void renderBotaoCinza();
+    void renderBotaoAddBrilho();
     BOTAO getBotaoAddImagem();
     BOTAO getBotaoClicar();
     BOTAO getBotaoPincel();
@@ -103,6 +107,7 @@ public:
     BOTAO getBotaoVertical();
     BOTAO getBotaoHorizontal();
     BOTAO getBotaoCinza();
+    BOTAO getBotaoAddBrilho();
     void alteraBotaoSelecionado(int botaoSelecionado);
     void carregarNomeArquivos();
     void renderSubmenuArquivos();
@@ -121,23 +126,34 @@ public:
     void renderSliderB();
     void renderSliderRaio();
     void renderSliderBrilho();
+    void renderSliderGama();
     bool verificaSegurandoSlider(Slider slider, int mouseX, int mouseY);
     Slider getSliderR();
     Slider getSliderG();
     Slider getSliderB();
     Slider getSliderRaio();
+    Slider getSliderBrilho();
+    Slider getSliderGama();
     void setSegurandoR(bool segurando);
     void setSegurandoG(bool segurando);
     void setSegurandoB(bool segurando);
     void setSegurandoRaio(bool segurando);
+    void setSegurandoBrilho(bool segurando);
+    void setSegurandoGama(bool segurando);
+    int getValorBrilho();
+    int getValorGama();
     bool getSegurandoR();
     bool getSegurandoG();
     bool getSegurandoB();
     bool getSegurandoRaio();
-    void mudaValorSliderR(int valor);
-    void mudaValorSliderG(int valor);
-    void mudaValorSliderB(int valor);
-    void mudaValorSliderRaio(int valor);
+    bool getSegurandoBrilho();
+    bool getSegurandoGama();
+    void mudaValorSliderR(int mouseX);
+    void mudaValorSliderG(int mouseX);
+    void mudaValorSliderB(int mouseX);
+    void mudaValorSliderRaio(int mouseX);
+    void mudaValorSliderBrilho(int mouseX);
+    void mudaValorSliderGama(int mouseX);
     void renderPreviewCor(int screenWidth);
 };
 
