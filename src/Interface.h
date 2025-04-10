@@ -63,6 +63,7 @@ private:
     Slider sliderBrilho;
     BOTAO addBrilho;
     Slider sliderGama;
+    BOTAO addGama;
 
     BOTAO fliperVertical;
     BOTAO fliperHorizontal;
@@ -97,6 +98,7 @@ public:
     void renderBotaoHorizontal();
     void renderBotaoCinza();
     void renderBotaoAddBrilho();
+    void renderBotaoAddGama();
     BOTAO getBotaoAddImagem();
     BOTAO getBotaoClicar();
     BOTAO getBotaoPincel();
@@ -108,6 +110,7 @@ public:
     BOTAO getBotaoHorizontal();
     BOTAO getBotaoCinza();
     BOTAO getBotaoAddBrilho();
+    BOTAO getBotaoAddGama();
     void alteraBotaoSelecionado(int botaoSelecionado);
     void carregarNomeArquivos();
     void renderSubmenuArquivos();

@@ -11,7 +11,7 @@
 #include <string.h>
 #include "gl_canvas2d.h"
 
-#define posBotoesClick 8.5/10
+#define posBotoesClick 9/10
 #define larguraBotoesClick 46
 #define alturaBotoesClick 30
 #define distanciaEntreBotoesClick 5
@@ -33,7 +33,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     carregarNomeArquivos();
 
     botaoAddImagem.borda1X = inicioMenuLateralX + 5;
-    botaoAddImagem.borda1Y = screenHeight * 9 / 10;
+    botaoAddImagem.borda1Y = screenHeight * 9.5 / 10;
     botaoAddImagem.borda2X = screenWidth - 5;
     botaoAddImagem.borda2Y = botaoAddImagem.borda1Y + 30;
     botaoAddImagem.tem_borda = 1;
@@ -76,7 +76,7 @@ Interface::Interface(int screenWidth, int screenHeight)
 
     sliderR.inicioX = inicioMenuLateralX + 5;
     sliderR.fimX = balde.borda2X - 10;
-    sliderR.Y = screenHeight * 8 / 10;
+    sliderR.Y = screenHeight * 8.5 / 10;
     sliderR.valorMinimo = 0;
     sliderR.valorMaximo = 255;
     sliderR.valorAtual = 255;
@@ -128,6 +128,12 @@ Interface::Interface(int screenWidth, int screenHeight)
     addBrilho.borda2Y = sliderBrilho.Y + alturaBotoesClick;
     addBrilho.tem_borda = 1;
 
+    addGama.borda1X = sliderGama.fimX + 15;
+    addGama.borda1Y = sliderGama.Y;
+    addGama.borda2X = addGama.borda1X + larguraBotoesClick;
+    addGama.borda2Y = sliderGama.Y + alturaBotoesClick;
+    addGama.tem_borda = 1;
+
     fliperVertical.borda1X = sliderRaio.fimX + 15;
     fliperVertical.borda1Y = sliderRaio.Y - 35;
     fliperVertical.borda2X = fliperVertical.borda1X + larguraBotoesClick;
@@ -177,6 +183,7 @@ void Interface::render(int screenWidth, int screenHeight){
     renderSliderBrilho();
     renderSliderGama();
     renderBotaoAddBrilho();
+    renderBotaoAddGama();
     renderBotaoVertical();
     renderBotaoHorizontal();
     renderBotaoCinza();
@@ -299,6 +306,13 @@ void Interface::renderBotaoAddBrilho(){
     CV::rectFill((addBrilho.borda1X + addBrilho.borda2X) / 2 - 2, addBrilho.borda1Y + 5, (addBrilho.borda1X + addBrilho.borda2X) / 2 + 2, addBrilho.borda2Y - 5);
 }
 
+void Interface::renderBotaoAddGama(){
+    renderBotao(addGama);
+    CV::color(0.9, 0.9, 0.9);
+    CV::rectFill(addGama.borda1X + 5, (addGama.borda1Y + addGama.borda2Y) /2 - 2, addGama.borda2X - 5, (addGama.borda1Y + addGama.borda2Y) /2 + 2);
+    CV::rectFill((addGama.borda1X + addGama.borda2X) / 2 - 2, addGama.borda1Y + 5, (addGama.borda1X + addGama.borda2X) / 2 + 2, addGama.borda2Y - 5);
+}
+
 BOTAO Interface::getBotaoAddImagem(){
     return botaoAddImagem;
 }
@@ -341,6 +355,10 @@ BOTAO Interface::getBotaoCinza(){
 
 BOTAO Interface::getBotaoAddBrilho(){
     return addBrilho;
+}
+
+BOTAO Interface::getBotaoAddGama(){
+    return addGama;
 }
 
 void Interface::alteraBotaoSelecionado(int botaoSelecionado){

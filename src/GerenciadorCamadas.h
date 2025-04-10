@@ -69,6 +69,7 @@ public:
    void flipHorizontal();
    void aplicarTonsDecinza();
    void adicionarBrilho(int valorBrilho);
+   void adicionarGama(int valorGama);
 };
 
 #endif

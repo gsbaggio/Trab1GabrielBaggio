@@ -456,3 +456,21 @@ void gerenciadorCamadas::adicionarBrilho(int valorBrilho){
         camadas[camadaAtiva].camada[i * 4 + 2] = b;
     }
 }
+
+void gerenciadorCamadas::adicionarGama(int valorGama){
+    float gama = (float)valorGama / 10;
+
+    unsigned char lookupTable[256];
+    
+    for (int i = 0; i < 256; i++) {
+        float normalizado = (float)i / 255;
+        float corrigido = pow(normalizado, (float)1 / gama);
+        lookupTable[i] = (unsigned char)(corrigido * (float)255 + 0.5);
+    }
+
+    for (int i = 0; i < width * height; i++) {
+        camadas[camadaAtiva].camada[i * 4] = lookupTable[camadas[camadaAtiva].camada[i * 4]];
+        camadas[camadaAtiva].camada[i * 4 + 1] = lookupTable[camadas[camadaAtiva].camada[i * 4 + 1]];
+        camadas[camadaAtiva].camada[i * 4 + 2] = lookupTable[camadas[camadaAtiva].camada[i * 4 + 2]];
+    }
+}

@@ -130,6 +130,9 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         else if(interface->verificaClickBotao(interface->getBotaoAddBrilho(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
             gCamadas->adicionarBrilho(interface->getValorBrilho());
         }
+        else if(interface->verificaClickBotao(interface->getBotaoAddGama(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+            gCamadas->adicionarGama(interface->getValorGama());
+        }
         else if(interface->verificaClickBotao(interface->getBotaoVertical(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
             gCamadas->flipVertical();
         }
