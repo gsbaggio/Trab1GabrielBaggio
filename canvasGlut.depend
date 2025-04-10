@@ -102,7 +102,7 @@
 	"gl_canvas2d.h"
 	<vector>
 
-1744228341 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.cpp
+1744228507 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\bmp.cpp
 	"Bmp.h"
 	<string.h>
 	<algorithm>
@@ -144,7 +144,7 @@
 
 1589217858 c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\vector2.h
 
-1744227937 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
+1744240997 source:c:\users\gabriel\desktop\cg\demos\trab1gabrielbaggio\src\gerenciadorcamadas.cpp
 	"GerenciadorCamadas.h"
 	<string.h>
 	"gl_canvas2d.h"

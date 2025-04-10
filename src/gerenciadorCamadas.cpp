@@ -160,7 +160,6 @@ void gerenciadorCamadas::renderBotaoCamada(){
         CV::color(1, 1, 1);
         CV::text(botaoCamada.bordaHideX + 7, (botaoCamada.borda1Y + botaoCamada.borda2Y) /2 - 2, "Hide");
 
-
         CV::text(botaoCamada.borda1X + 5, (botaoCamada.borda1Y + botaoCamada.borda2Y) /2 - 2, botaoCamada.nome);
         if(camadas[botaoCamada.posCamada].visivel == 0){
             CV::color(1, 0, 0);
@@ -209,12 +208,17 @@ bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){
         if(mouseX > botaoCamada.moveCima.borda1X && mouseX < botaoCamada.moveCima.borda2X && mouseY > botaoCamada.moveCima.borda1Y && mouseY < botaoCamada.moveCima.borda2Y){
             if(botaoCamada.posCamada < qntCamadas - 1){
                 Camada temp = camadas[botaoCamada.posCamada];
-                BotaoCamadas temp2 = botaoCamadas[botaoCamada.posCamada];
+
+                char nome1[50], nome2[50];
+                strcpy(nome1, botaoCamadas[botaoCamada.posCamada].nome);
+                strcpy(nome2, botaoCamadas[botaoCamada.posCamada + 1].nome);
 
                 camadas[botaoCamada.posCamada] = camadas[botaoCamada.posCamada + 1];
                 camadas[botaoCamada.posCamada + 1] = temp;
-                botaoCamadas[botaoCamada.posCamada] = botaoCamadas[botaoCamada.posCamada + 1];
-                botaoCamadas[botaoCamada.posCamada + 1] = temp2;
+                
+                strcpy(botaoCamadas[botaoCamada.posCamada + 1].nome, nome1);
+                strcpy(botaoCamadas[botaoCamada.posCamada].nome, nome2);
+                
                 if(camadaAtiva == botaoCamada.posCamada){
                     camadaAtiva++;
                 }
@@ -234,13 +238,16 @@ bool gerenciadorCamadas::verificaBotaoBaixo(int mouseX, int mouseY){
         if(mouseX > botaoCamada.moveBaixo.borda1X && mouseX < botaoCamada.moveBaixo.borda2X && mouseY > botaoCamada.moveBaixo.borda1Y && mouseY < botaoCamada.moveBaixo.borda2Y){
             if(botaoCamada.posCamada > 0){
                 Camada temp = camadas[botaoCamada.posCamada];
-                BotaoCamadas temp2 = botaoCamadas[botaoCamada.posCamada];
 
+                char nome1[50], nome2[50];
+                strcpy(nome1, botaoCamadas[botaoCamada.posCamada].nome);
+                strcpy(nome2, botaoCamadas[botaoCamada.posCamada - 1].nome);
 
                 camadas[botaoCamada.posCamada] = camadas[botaoCamada.posCamada - 1];
                 camadas[botaoCamada.posCamada - 1] = temp;
-                botaoCamadas[botaoCamada.posCamada] = botaoCamadas[botaoCamada.posCamada - 1];
-                botaoCamadas[botaoCamada.posCamada - 1] = temp2;
+                
+                strcpy(botaoCamadas[botaoCamada.posCamada - 1].nome, nome1);
+                strcpy(botaoCamadas[botaoCamada.posCamada].nome, nome2);
 
                 if(camadaAtiva == botaoCamada.posCamada){
                     camadaAtiva--;
