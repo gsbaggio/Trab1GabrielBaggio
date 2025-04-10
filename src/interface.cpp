@@ -106,6 +106,32 @@ Interface::Interface(int screenWidth, int screenHeight)
     sliderRaio.valorAtual = 10;
     sliderRaio.segurando = 0;
 
+    sliderBrilho.inicioX = inicioMenuLateralX + 5;
+    sliderBrilho.fimX = balde.borda2X - 50;
+    sliderBrilho.Y = sliderRaio.Y - 30;
+    sliderBrilho.valorMinimo = -255;
+    sliderBrilho.valorMaximo = 255;
+    sliderBrilho.valorAtual = 0;
+    sliderBrilho.segurando = 0;
+
+    fliperVertical.borda1X = sliderRaio.fimX + 15;
+    fliperVertical.borda1Y = sliderRaio.Y - 35;
+    fliperVertical.borda2X = screenWidth - 5;
+    fliperVertical.borda2Y = fliperVertical.borda1Y + 30;
+    fliperVertical.tem_borda = 1;
+
+    fliperHorizontal.borda1X = sliderRaio.fimX + 15;
+    fliperHorizontal.borda1Y = fliperVertical.borda1Y - 35;
+    fliperHorizontal.borda2X = screenWidth - 5;
+    fliperHorizontal.borda2Y = fliperHorizontal.borda1Y + 30;
+    fliperHorizontal.tem_borda = 1;
+
+    tonsCinza.borda1X = sliderRaio.fimX;
+    tonsCinza.borda1Y = fliperHorizontal.borda1Y - 33;
+    tonsCinza.borda2X = screenWidth - 5;
+    tonsCinza.borda2Y = tonsCinza.borda1Y + 30;
+    tonsCinza.tem_borda = 1;
+
     botaoSelecionado = 0;
     raioCor = 10;
     RGBA[0] = 255;
@@ -134,6 +160,10 @@ void Interface::render(int screenWidth, int screenHeight){
     renderSliderG();
     renderSliderB();
     renderSliderRaio();
+    renderSliderBrilho();
+    renderBotaoVertical();
+    renderBotaoHorizontal();
+    renderBotaoCinza();
     renderPreviewCor(screenWidth);
 
     if(submenuArquivos.aberto){
@@ -228,6 +258,24 @@ void Interface::renderBotaoBorracha(){
     CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Eras");
 }
 
+void Interface::renderBotaoVertical(){
+    renderBotao(fliperVertical);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(fliperVertical.borda1X + 5, (fliperVertical.borda1Y + fliperVertical.borda2Y) /2 - 2, "FlpV");
+}
+
+void Interface::renderBotaoHorizontal(){
+    renderBotao(fliperHorizontal);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(fliperHorizontal.borda1X + 5, (fliperHorizontal.borda1Y + fliperHorizontal.borda2Y) /2 - 2, "FlpH");
+}
+
+void Interface::renderBotaoCinza() {
+    renderBotao(tonsCinza);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(tonsCinza.borda1X + 5, (tonsCinza.borda1Y + tonsCinza.borda2Y)/2 - 2, "Cinza");
+}
+
 BOTAO Interface::getBotaoAddImagem(){
     return botaoAddImagem;
 }
@@ -254,6 +302,18 @@ BOTAO Interface::getBotaoBalde(){
 
 BOTAO Interface::getBotaoBorracha(){
     return borracha;
+}
+
+BOTAO Interface::getBotaoVertical(){
+    return fliperVertical;
+}
+
+BOTAO Interface::getBotaoHorizontal(){
+    return fliperHorizontal;
+}
+
+BOTAO Interface::getBotaoCinza(){
+    return tonsCinza;
 }
 
 void Interface::alteraBotaoSelecionado(int botaoSelecionado){
@@ -343,7 +403,6 @@ bool Interface::verificaClickSubmenu(Submenu submenu, int mouseX, int mouseY){
 }
 
 std::string Interface::verificaArquivoParaAbrir(int mouseX, int mouseY){
-    int i = 0;
     for(BotaoArquivo botaoArquivo : botaoArquivos){
         if(mouseX > submenuArquivos.borda1X - 2 && mouseX < submenuArquivos.borda2X + 2 && mouseY > submenuArquivos.borda1Y + botaoArquivo.deltaY - 2 && mouseY < submenuArquivos.borda1Y + botaoArquivo.deltaY + tamanhoBotaoArquivos + 2){
             return botaoArquivo.nome;
@@ -399,6 +458,13 @@ void Interface::renderSliderRaio(){
     CV::color(0.9, 0.9, 0.9);
     CV::text(sliderRaio.inicioX, sliderRaio.Y + 15, "Raio: ");
     CV::text(sliderRaio.fimX - 30, sliderRaio.Y + 15, std::to_string(sliderRaio.valorAtual).c_str());
+}
+
+void Interface::renderSliderBrilho(){
+    renderSlider(sliderBrilho);
+    CV::color(0.9, 0.9, 0.9);
+    CV::text(sliderBrilho.inicioX, sliderBrilho.Y + 15, "Brilho: ");
+    CV::text(sliderBrilho.fimX - 30, sliderBrilho.Y + 15, std::to_string(sliderBrilho.valorAtual).c_str());
 }
 
 bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){

@@ -40,6 +40,9 @@ int mouseX, mouseY; //variaveis globais do mouse para poder exibir dentro da ren
 int cont = 0;
 
 void carregarImagemNaCamada(char *nome_arquivo){
+    if(gCamadas->getQntCamadas() >= 10){
+        return;
+    }
     img1 = new Bmp(nome_arquivo);
     img1->convertBGRtoRGB();
     gCamadas->carregaCamada(img1->getImage(), img1->getWidth(), img1->getHeight());
@@ -123,6 +126,15 @@ void mouse(int button, int state, int wheel, int direction, int x, int y)
         }
         else if(interface->verificaClickBotao(interface->getBotaoBorracha(), mouseX, mouseY)){
             interface->alteraBotaoSelecionado(5);
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoVertical(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+            gCamadas->flipVertical();
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoHorizontal(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+            gCamadas->flipHorizontal();
+        }
+        else if(interface->verificaClickBotao(interface->getBotaoCinza(), mouseX, mouseY) && gCamadas->getQntCamadas() > 0){
+            gCamadas->aplicarTonsDecinza();
         }
         gCamadas->setPintando(0);
         interface->setSegurandoR(0);

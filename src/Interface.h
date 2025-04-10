@@ -60,9 +60,12 @@ private:
     Slider sliderB;
     Slider sliderRaio;
 
-    BOTAO flipVertical;
-    BOTAO flipHorizontal;
-    Slider controleBrilho;
+    Slider sliderBrilho;
+    BOTAO fliperVertical;
+    BOTAO fliperHorizontal;
+
+    BOTAO tonsCinza;
+
     int botaoSelecionado; // 0 = clicar, 1 = pincel, 2 = spray, 3 = marca texto, 4 = balde, 5 = borracha
     int raioCor;
     unsigned char RGBA[4];
@@ -87,6 +90,9 @@ public:
     void renderBotaoMarcaTexto();
     void renderBotaoBalde();
     void renderBotaoBorracha();
+    void renderBotaoVertical();
+    void renderBotaoHorizontal();
+    void renderBotaoCinza();
     BOTAO getBotaoAddImagem();
     BOTAO getBotaoClicar();
     BOTAO getBotaoPincel();
@@ -94,6 +100,9 @@ public:
     BOTAO getBotaoMarcaTexto();
     BOTAO getBotaoBalde();
     BOTAO getBotaoBorracha();
+    BOTAO getBotaoVertical();
+    BOTAO getBotaoHorizontal();
+    BOTAO getBotaoCinza();
     void alteraBotaoSelecionado(int botaoSelecionado);
     void carregarNomeArquivos();
     void renderSubmenuArquivos();
@@ -111,6 +120,7 @@ public:
     void renderSliderG();
     void renderSliderB();
     void renderSliderRaio();
+    void renderSliderBrilho();
     bool verificaSegurandoSlider(Slider slider, int mouseX, int mouseY);
     Slider getSliderR();
     Slider getSliderG();

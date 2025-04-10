@@ -65,6 +65,9 @@ public:
    bool verificaBotaoCima(int mouseX, int mouseY);
    bool verificaBotaoBaixo(int mouseX, int mouseY);
    void pintarCamada(int mouseX, int mouseY, unsigned char *RGBA, int tipoPintura, int raio);
+   void flipVertical();
+   void flipHorizontal();
+   void aplicarTonsDecinza();
 };
 
 #endif

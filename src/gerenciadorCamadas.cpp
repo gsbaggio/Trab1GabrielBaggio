@@ -124,7 +124,7 @@ void gerenciadorCamadas::addBotaoCamada(int camadaAtiva, int screenWidth, int sc
 
     novoBotao.posCamada = camadaAtiva;
     char nome[50];
-    sprintf(nome, "Camada Posicao %d", camadaAtiva + 1);
+    sprintf(nome, "Camada %d", camadaAtiva + 1);
     strcpy(novoBotao.nome, nome);
     botaoCamadas.push_back(novoBotao);
 }
@@ -337,20 +337,48 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
         }
         return;
     }
-    else if(tipoPintura == 4){ // balde
-        for(int i = -raio; i <= raio; i++){
-            for(int j = -raio; j <= raio; j++){
-                if(i*i + j*j <= raio*raio){
-                    int posX = mouseX + i - borda1X;
-                    int posY = mouseY + j - borda1Y;
-                    int posRGBA = (posY * width + posX) * 4;
-                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
-                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
-                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
-                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
-                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3];
-                    }
-                }
+    else if(tipoPintura == 4){ // balde (floodfill)
+        int startX = mouseX - borda1X;
+        int startY = mouseY - borda1Y;
+        
+        if(startX < 0 || startX >= width || startY < 0 || startY >= height) {
+            return;
+        }
+        
+        int startPos = (startY * width + startX) * 4;
+        unsigned char targetR = camadas[camadaAtiva].camada[startPos];
+        unsigned char targetG = camadas[camadaAtiva].camada[startPos + 1];
+        unsigned char targetB = camadas[camadaAtiva].camada[startPos + 2];
+        unsigned char targetA = camadas[camadaAtiva].camada[startPos + 3];
+        
+        if(targetR == RGBA[0] && targetG == RGBA[1] && targetB == RGBA[2] && targetA == RGBA[3]) {
+            return;
+        }
+        
+        std::vector<std::pair<int, int>> queue;
+        queue.push_back(std::make_pair(startX, startY));
+        
+        while(!queue.empty()) {
+            int x = queue.back().first;
+            int y = queue.back().second;
+            queue.pop_back();
+            
+            int pos = (y * width + x) * 4;
+            
+            if(camadas[camadaAtiva].camada[pos] == targetR && 
+               camadas[camadaAtiva].camada[pos + 1] == targetG && 
+               camadas[camadaAtiva].camada[pos + 2] == targetB && 
+               camadas[camadaAtiva].camada[pos + 3] == targetA) {
+                
+                camadas[camadaAtiva].camada[pos] = RGBA[0];
+                camadas[camadaAtiva].camada[pos + 1] = RGBA[1];
+                camadas[camadaAtiva].camada[pos + 2] = RGBA[2];
+                camadas[camadaAtiva].camada[pos + 3] = RGBA[3];
+                
+                if(x > 0) queue.push_back(std::make_pair(x - 1, y));
+                if(x < width - 1) queue.push_back(std::make_pair(x + 1, y));
+                if(y > 0) queue.push_back(std::make_pair(x, y - 1));
+                if(y < height - 1) queue.push_back(std::make_pair(x, y + 1));
             }
         }
     }
@@ -370,5 +398,41 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
                 }
             }
         }
+    }
+}
+
+void gerenciadorCamadas::flipVertical(){
+    for(int i = 0; i < width; i++){
+        for(int j = 0; j < height / 2; j++){
+            int pos1 = (j * width + i) * 4;
+            int pos2 = ((height - j - 1) * width + i) * 4;
+            unsigned char temp[4];
+            memcpy(temp, &camadas[camadaAtiva].camada[pos1], 4); // mem copy mto badass pra desempenho!
+            memcpy(&camadas[camadaAtiva].camada[pos1], &camadas[camadaAtiva].camada[pos2], 4);
+            memcpy(&camadas[camadaAtiva].camada[pos2], temp, 4);
+        }
+    }
+}
+
+void gerenciadorCamadas::flipHorizontal(){
+    for(int i = 0; i < width / 2; i++){
+        for(int j = 0; j < height; j++){
+            int pos1 = (j * width + i) * 4;
+            int pos2 = (j * width + (width - i - 1)) * 4;
+            unsigned char temp[4];
+            memcpy(temp, &camadas[camadaAtiva].camada[pos1], 4); // mem copy mto badass pra desempenho!
+            memcpy(&camadas[camadaAtiva].camada[pos1], &camadas[camadaAtiva].camada[pos2], 4);
+            memcpy(&camadas[camadaAtiva].camada[pos2], temp, 4);
+        }
+    }
+}
+
+void gerenciadorCamadas::aplicarTonsDecinza(){
+    for (int i = 0; i < width * height; i++) {
+        unsigned char gray = camadas[camadaAtiva].camada[i * 4] * 0.3 + camadas[camadaAtiva].camada[i * 4 + 1] * 0.59 + camadas[camadaAtiva].camada[i * 4 + 2] * 0.11;
+                             
+        camadas[camadaAtiva].camada[i * 4] = gray;
+        camadas[camadaAtiva].camada[i * 4 + 1] = gray;
+        camadas[camadaAtiva].camada[i * 4 + 2] = gray;
     }
 }

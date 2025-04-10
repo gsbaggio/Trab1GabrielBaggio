@@ -53,15 +53,6 @@ public:
    int    getHeight(void);
    void   setHeight(int h);
    void   convertBGRtoRGB(void);
-   void   adjustBrightness(int brightness);
-   void   adjustContrast(float contrast);
-   int    contains(int x, int y);
-   void   flipVertical(void);
-   void   flipHorizontal(void);
-   void   image_R(void);
-   void   image_G(void);
-   void   image_B(void);
-   void   image_Gray(void);
    int    x_start, y_start, x_end, y_end;
 
 
