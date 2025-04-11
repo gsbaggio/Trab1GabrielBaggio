@@ -1,11 +1,4 @@
-//*********************************************************
-//
-// classe para fazer o carregamento de arquivos no formato BMP
-// Autor: Cesar Tadeu Pozzer
-//        pozzer@inf.ufsm.br
-//  Versao 09/2010
-//
-//**********************************************************
+// esta classe gerencia as camadas e aquele menu que tem os botoes de gerenciar as classes
 
 #include "GerenciadorCamadas.h"
 #include <string.h>
@@ -14,7 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_CAMADAS 10
 
 gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight, int screenWidth, int inicioMenuLateralX)
 {
@@ -33,7 +25,7 @@ gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int
     qntCamadas = 0;
 }
 
-void gerenciadorCamadas::carregaCamada(unsigned char *data, int imgWidth, int imgHeight){
+void gerenciadorCamadas::carregaCamada(unsigned char *data, int imgWidth, int imgHeight){ // coloca uma camada nova com a imagem dela no centro
     Camada novaCamada;
     novaCamada.camada = new unsigned char[width * height * 4];
     int i, j, posRGBA, posRGB;
@@ -63,7 +55,7 @@ void gerenciadorCamadas::carregaCamada(unsigned char *data, int imgWidth, int im
     camadaAtiva = qntCamadas - 1;
 }
 
-void gerenciadorCamadas::render(){
+void gerenciadorCamadas::render(){ // renderiza as camadas e os botoes das camadas
     int i, j, posRGBA, deslocX = borda1X, deslocY = borda1Y;
     float r, g, b;
     for(Camada camada : camadas){
@@ -87,7 +79,7 @@ void gerenciadorCamadas::render(){
     renderCaixaCamadas();
 }
 
-bool gerenciadorCamadas::verificaMouseCamada(int mouseX, int mouseY){
+bool gerenciadorCamadas::verificaMouseCamada(int mouseX, int mouseY){ // função auxiliar pra verificar se o mouse esta na camada
     if(mouseX > borda1X && mouseX < borda2X && mouseY > borda1Y && mouseY < borda2Y){
         return 1;
     }
@@ -102,7 +94,7 @@ bool gerenciadorCamadas::getPintando(){
     return pintando;
 }
 
-void gerenciadorCamadas::addBotaoCamada(int camadaAtiva, int screenWidth, int screenHeight, int inicioMenuLateralX){
+void gerenciadorCamadas::addBotaoCamada(int camadaAtiva, int screenWidth, int screenHeight, int inicioMenuLateralX){ // adiciona um novo botao no menu de gerenciador de camadas
     BotaoCamadas novoBotao;
     novoBotao.borda1X = inicioMenuLateralX + 30;
     novoBotao.borda1Y = screenHeight * (camadaAtiva) / 20 + 20;
@@ -129,7 +121,7 @@ void gerenciadorCamadas::addBotaoCamada(int camadaAtiva, int screenWidth, int sc
     botaoCamadas.push_back(novoBotao);
 }
 
-void gerenciadorCamadas::renderBotaoSwitch(BotaoSwitch botaoSwitch){
+void gerenciadorCamadas::renderBotaoSwitch(BotaoSwitch botaoSwitch){ // renderiza aquelas flechas pra movimentar a camada para cima ou para baixo
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(botaoSwitch.borda1X, botaoSwitch.borda1Y, botaoSwitch.borda2X, botaoSwitch.borda2Y);
     CV::color(1, 1, 1);
@@ -145,7 +137,7 @@ void gerenciadorCamadas::renderBotaoSwitch(BotaoSwitch botaoSwitch){
     }
 }
 
-void gerenciadorCamadas::renderBotaoCamada(){
+void gerenciadorCamadas::renderBotaoCamada(){ // renderiza os botoes de cada camada
     for(BotaoCamadas botaoCamada : botaoCamadas){
         CV::color(0.3, 0.3, 0.3);
         CV::rectFill(botaoCamada.borda1X, botaoCamada.borda1Y, botaoCamada.borda2X, botaoCamada.borda2Y);
@@ -169,7 +161,7 @@ void gerenciadorCamadas::renderBotaoCamada(){
     }
 }
 
-void gerenciadorCamadas::renderCaixaCamadas(){
+void gerenciadorCamadas::renderCaixaCamadas(){ // renderiza aquela caixinha em volta dos botoes
     CV::color(0.9, 0.9, 0.9);
     CV::rect(caixaBotoes1X, caixaBotoes1Y, caixaBotoes2X, caixaBotoes2Y);
 }
@@ -178,7 +170,7 @@ int gerenciadorCamadas::getQntCamadas(){
     return qntCamadas;
 }
 
-bool gerenciadorCamadas::verificaBotaoHide(int mouseX, int mouseY){
+bool gerenciadorCamadas::verificaBotaoHide(int mouseX, int mouseY){ // verifica se clicou no botao hide, e trata o click
     for(BotaoCamadas botaoCamada : botaoCamadas){
         if(mouseX > botaoCamada.bordaHideX && mouseX < botaoCamada.borda2X && mouseY > botaoCamada.borda1Y && mouseY < botaoCamada.borda2Y){
             if(camadas[botaoCamada.posCamada].visivel == 1){
@@ -193,7 +185,7 @@ bool gerenciadorCamadas::verificaBotaoHide(int mouseX, int mouseY){
     return 0;
 }
 
-bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){
+bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){ // verifica se clicou pra ativar a camada, e trata o click
     for(BotaoCamadas botaoCamada : botaoCamadas){
         if(mouseX > botaoCamada.borda1X && mouseX < botaoCamada.bordaHideX && mouseY > botaoCamada.borda1Y && mouseY < botaoCamada.borda2Y){
             camadaAtiva = botaoCamada.posCamada;
@@ -203,7 +195,7 @@ bool gerenciadorCamadas::verificaBotaoAtiva(int mouseX, int mouseY){
     return 0;
 }
 
-bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){
+bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){ // verifica se clicou no botao colocar camada pra cima, e trata o click
     for(BotaoCamadas botaoCamada : botaoCamadas){
         if(mouseX > botaoCamada.moveCima.borda1X && mouseX < botaoCamada.moveCima.borda2X && mouseY > botaoCamada.moveCima.borda1Y && mouseY < botaoCamada.moveCima.borda2Y){
             if(botaoCamada.posCamada < qntCamadas - 1){
@@ -233,7 +225,7 @@ bool gerenciadorCamadas::verificaBotaoCima(int mouseX, int mouseY){
     return 0;
 }
 
-bool gerenciadorCamadas::verificaBotaoBaixo(int mouseX, int mouseY){
+bool gerenciadorCamadas::verificaBotaoBaixo(int mouseX, int mouseY){ // verifica se clicou no botao colocar camada pra baixo, e trata o click
     for(BotaoCamadas botaoCamada : botaoCamadas){
         if(mouseX > botaoCamada.moveBaixo.borda1X && mouseX < botaoCamada.moveBaixo.borda2X && mouseY > botaoCamada.moveBaixo.borda1Y && mouseY < botaoCamada.moveBaixo.borda2Y){
             if(botaoCamada.posCamada > 0){
@@ -263,7 +255,7 @@ bool gerenciadorCamadas::verificaBotaoBaixo(int mouseX, int mouseY){
     return 0;
 }
 
-void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGBA, int tipoPintura, int raio){
+void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGBA, int tipoPintura, int raio){ // funcao pra fazer os efeitos de pintar
     if(tipoPintura == 1){ // pincel
         for(int i = -raio; i <= raio; i++){
             for(int j = -raio; j <= raio; j++){
@@ -285,15 +277,15 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
     else if(tipoPintura == 2){ // spray
         srand(time(NULL) + mouseX + mouseY); 
         
-        int numPoints = raio * raio / 2; 
-        for(int p = 0; p < numPoints; p++){
+        int numPontos = raio * raio / 2; 
+        for(int p = 0; p < numPontos; p++){
             int i, j;
-            do {
+            do{
                 i = (rand() % (2 * raio)) - raio;
                 j = (rand() % (2 * raio)) - raio;
-            } while(i*i + j*j > raio*raio);
+            }while(i*i + j*j > raio*raio);
             
-            if(rand() % 100 > 60){ 
+            if(rand() % 100 > 60){  // fica colocando um valor aleatorio pra ver se vai pintar ou não
                 int posX = mouseX + i - borda1X;
                 int posY = mouseY + j - borda1Y;
                 int posRGBA = (posY * width + posX) * 4;
@@ -312,73 +304,70 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
         int larguraHighlight = 2; 
         
         for(int i = -larguraHighlight; i <= larguraHighlight; i++){
-            for(int j = -alturaHighlight; j <= alturaHighlight; j++){
-                if(i >= -larguraHighlight && i <= larguraHighlight && 
-                   j >= -alturaHighlight && j <= alturaHighlight) {
+            for(int j = -alturaHighlight; j <= alturaHighlight; j++){  
+                int posX = mouseX + i - borda1X;
+                int posY = mouseY + j - borda1Y;
+                int posRGBA = (posY * width + posX) * 4;
                     
-                    int posX = mouseX + i - borda1X;
-                    int posY = mouseY + j - borda1Y;
-                    int posRGBA = (posY * width + posX) * 4;
-                    
-                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
-                        if(camadas[camadaAtiva].camada[posRGBA + 3] == 1){
-                            camadas[camadaAtiva].camada[posRGBA] = (camadas[camadaAtiva].camada[posRGBA] * 0.7 + RGBA[0] * 0.3);
-                            camadas[camadaAtiva].camada[posRGBA + 1] = (camadas[camadaAtiva].camada[posRGBA + 1] * 0.7 + RGBA[1] * 0.3);
-                            camadas[camadaAtiva].camada[posRGBA + 2] = (camadas[camadaAtiva].camada[posRGBA + 2] * 0.7 + RGBA[2] * 0.3);
-                        } else {
-                            camadas[camadaAtiva].camada[posRGBA] = RGBA[0];
-                            camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
-                            camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
-                            camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3]; 
-                        }
+                if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                    if(camadas[camadaAtiva].camada[posRGBA + 3] == 1){
+                        camadas[camadaAtiva].camada[posRGBA] = (camadas[camadaAtiva].camada[posRGBA] * 0.7 + RGBA[0] * 0.3); // faz uma interpolacao com o que esta e o marca texto
+                        camadas[camadaAtiva].camada[posRGBA + 1] = (camadas[camadaAtiva].camada[posRGBA + 1] * 0.7 + RGBA[1] * 0.3);
+                        camadas[camadaAtiva].camada[posRGBA + 2] = (camadas[camadaAtiva].camada[posRGBA + 2] * 0.7 + RGBA[2] * 0.3);
+                    } else {
+                        camadas[camadaAtiva].camada[posRGBA] = RGBA[0]; // se nao tem alpha, pinta normalmente
+                        camadas[camadaAtiva].camada[posRGBA + 1] = RGBA[1];
+                        camadas[camadaAtiva].camada[posRGBA + 2] = RGBA[2];
+                        camadas[camadaAtiva].camada[posRGBA + 3] = RGBA[3]; 
                     }
                 }
+                
             }
         }
         return;
     }
     else if(tipoPintura == 4){ // balde (floodfill)
-        int startX = mouseX - borda1X;
-        int startY = mouseY - borda1Y;
+        int inicioX = mouseX - borda1X;
+        int inicioY = mouseY - borda1Y;
         
-        if(startX < 0 || startX >= width || startY < 0 || startY >= height) {
+        if(inicioX < 0 || inicioX >= width || inicioY < 0 || inicioY >= height) {
             return;
         }
         
-        int startPos = (startY * width + startX) * 4;
-        unsigned char targetR = camadas[camadaAtiva].camada[startPos];
-        unsigned char targetG = camadas[camadaAtiva].camada[startPos + 1];
-        unsigned char targetB = camadas[camadaAtiva].camada[startPos + 2];
-        unsigned char targetA = camadas[camadaAtiva].camada[startPos + 3];
+        int inicioRGBA = (inicioY * width + inicioX) * 4;
+        unsigned char R = camadas[camadaAtiva].camada[inicioRGBA];
+        unsigned char G = camadas[camadaAtiva].camada[inicioRGBA + 1];
+        unsigned char B = camadas[camadaAtiva].camada[inicioRGBA + 2];
+        unsigned char A = camadas[camadaAtiva].camada[inicioRGBA + 3];
         
-        if(targetR == RGBA[0] && targetG == RGBA[1] && targetB == RGBA[2] && targetA == RGBA[3]) {
+        if(R == RGBA[0] && G == RGBA[1] && B == RGBA[2] && A == RGBA[3]) { // se ja esta daquela cor, retorna
             return;
         }
         
-        std::vector<std::pair<int, int>> queue;
-        queue.push_back(std::make_pair(startX, startY));
+        std::vector<std::pair<int, int>> fila;
+        fila.push_back(std::make_pair(inicioX, inicioY));
         
-        while(!queue.empty()) {
-            int x = queue.back().first;
-            int y = queue.back().second;
-            queue.pop_back();
+        while(!fila.empty()) {
+            int x = fila.back().first;
+            int y = fila.back().second;
+            fila.pop_back();
             
             int pos = (y * width + x) * 4;
             
-            if(camadas[camadaAtiva].camada[pos] == targetR && 
-               camadas[camadaAtiva].camada[pos + 1] == targetG && 
-               camadas[camadaAtiva].camada[pos + 2] == targetB && 
-               camadas[camadaAtiva].camada[pos + 3] == targetA) {
+            if(camadas[camadaAtiva].camada[pos] == R && 
+               camadas[camadaAtiva].camada[pos + 1] == G && 
+               camadas[camadaAtiva].camada[pos + 2] == B && 
+               camadas[camadaAtiva].camada[pos + 3] == A) {
                 
                 camadas[camadaAtiva].camada[pos] = RGBA[0];
                 camadas[camadaAtiva].camada[pos + 1] = RGBA[1];
                 camadas[camadaAtiva].camada[pos + 2] = RGBA[2];
                 camadas[camadaAtiva].camada[pos + 3] = RGBA[3];
-                
-                if(x > 0) queue.push_back(std::make_pair(x - 1, y));
-                if(x < width - 1) queue.push_back(std::make_pair(x + 1, y));
-                if(y > 0) queue.push_back(std::make_pair(x, y - 1));
-                if(y < height - 1) queue.push_back(std::make_pair(x, y + 1));
+                // adiciona na fila os vizinhos
+                if(x > 0) fila.push_back(std::make_pair(x - 1, y));
+                if(x < width - 1) fila.push_back(std::make_pair(x + 1, y));
+                if(y > 0) fila.push_back(std::make_pair(x, y - 1));
+                if(y < height - 1) fila.push_back(std::make_pair(x, y + 1));
             }
         }
     }
@@ -389,7 +378,7 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
                     int posX = mouseX + i - borda1X;
                     int posY = mouseY + j - borda1Y;
                     int posRGBA = (posY * width + posX) * 4;
-                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){
+                    if(posX >= 0 && posX < width && posY >= 0 && posY < height){ // so coloca o alpha em 0 e seta os outros por padrao
                         camadas[camadaAtiva].camada[posRGBA] = 1;
                         camadas[camadaAtiva].camada[posRGBA + 1] = 1;
                         camadas[camadaAtiva].camada[posRGBA + 2] = 1;
@@ -401,7 +390,7 @@ void gerenciadorCamadas::pintarCamada(int mouseX, int mouseY, unsigned char *RGB
     }
 }
 
-void gerenciadorCamadas::flipVertical(){
+void gerenciadorCamadas::flipVertical(){ // flip vertical
     for(int i = 0; i < width; i++){
         for(int j = 0; j < height / 2; j++){
             int pos1 = (j * width + i) * 4;
@@ -414,7 +403,7 @@ void gerenciadorCamadas::flipVertical(){
     }
 }
 
-void gerenciadorCamadas::flipHorizontal(){
+void gerenciadorCamadas::flipHorizontal(){ // flip horizontal
     for(int i = 0; i < width / 2; i++){
         for(int j = 0; j < height; j++){
             int pos1 = (j * width + i) * 4;
@@ -427,7 +416,7 @@ void gerenciadorCamadas::flipHorizontal(){
     }
 }
 
-void gerenciadorCamadas::aplicarTonsDecinza(){
+void gerenciadorCamadas::aplicarTonsDecinza(){ // aplica o padrao de tons de cinza, com os pesos de 0.3, 0.59 e 0.11
     for (int i = 0; i < width * height; i++) {
         unsigned char gray = camadas[camadaAtiva].camada[i * 4] * 0.3 + camadas[camadaAtiva].camada[i * 4 + 1] * 0.59 + camadas[camadaAtiva].camada[i * 4 + 2] * 0.11;
                              
@@ -437,7 +426,7 @@ void gerenciadorCamadas::aplicarTonsDecinza(){
     }
 }
 
-void gerenciadorCamadas::adicionarBrilho(int valorBrilho){
+void gerenciadorCamadas::adicionarBrilho(int valorBrilho){ // add brilho
     for (int i = 0; i < width * height; i++) {
         int r = camadas[camadaAtiva].camada[i * 4] + valorBrilho;
         int g = camadas[camadaAtiva].camada[i * 4 + 1] + valorBrilho;
@@ -457,7 +446,7 @@ void gerenciadorCamadas::adicionarBrilho(int valorBrilho){
     }
 }
 
-void gerenciadorCamadas::adicionarGama(int valorGama){
+void gerenciadorCamadas::adicionarGama(int valorGama){ // add gama
     float gama = (float)valorGama / 10;
 
     unsigned char lookupTable[256];

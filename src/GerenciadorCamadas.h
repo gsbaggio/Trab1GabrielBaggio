@@ -1,20 +1,11 @@
-//*********************************************************
-//
-// classe para fazer o carregamento de arquivos no formato BMP
-// Autor: Cesar Tadeu Pozzer
-//        pozzer@inf.ufsm.br
-//
-//  Referencia:  http://astronomy.swin.edu.au/~pbourke/dataformats/bmp/
-//  Versao 09/2010
-//
-//**********************************************************
-
 #ifndef ___GERENCIADORCAMADAS__H___
 #define ___GERENCIADORCAMADAS__H___
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+
+#define MAX_CAMADAS 10
 
 #define uchar unsigned char
 

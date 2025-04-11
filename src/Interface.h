@@ -1,14 +1,3 @@
-//*********************************************************
-//
-// classe para fazer o carregamento de arquivos no formato BMP
-// Autor: Cesar Tadeu Pozzer
-//        pozzer@inf.ufsm.br
-//
-//  Referencia:  http://astronomy.swin.edu.au/~pbourke/dataformats/bmp/
-//  Versao 09/2010
-//
-//**********************************************************
-
 #ifndef ___INTERFACE__H___
 #define ___INTERFACE__H___
 
@@ -85,20 +74,8 @@ public:
     int getBordaMenuLateralX();
     int getGrossuraBordasLaterais();
     void renderFundo();
-    void renderBotao(BOTAO botao);
+    void renderBotao(BOTAO botao, const char* texto, bool isImage);
     bool verificaClickBotao(BOTAO botao, int mouseX, int mouseY);
-    void renderBotaoAdd();
-    void renderBotaoClicar();
-    void renderBotaoPincel();
-    void renderBotaoSpray();
-    void renderBotaoMarcaTexto();
-    void renderBotaoBalde();
-    void renderBotaoBorracha();
-    void renderBotaoVertical();
-    void renderBotaoHorizontal();
-    void renderBotaoCinza();
-    void renderBotaoAddBrilho();
-    void renderBotaoAddGama();
     BOTAO getBotaoAddImagem();
     BOTAO getBotaoClicar();
     BOTAO getBotaoPincel();
@@ -123,13 +100,7 @@ public:
     void setBotaoSelecionado(int botaoSelecionado);
     unsigned char *getRGBA();
     int getRaioCor();
-    void renderSlider(Slider slider);
-    void renderSliderR();
-    void renderSliderG();
-    void renderSliderB();
-    void renderSliderRaio();
-    void renderSliderBrilho();
-    void renderSliderGama();
+    void renderSlider(Slider slider, const char* label = nullptr, bool showValue = true);
     bool verificaSegurandoSlider(Slider slider, int mouseX, int mouseY);
     Slider getSliderR();
     Slider getSliderG();

@@ -1,11 +1,4 @@
-//*********************************************************
-//
-// classe para fazer o carregamento de arquivos no formato BMP
-// Autor: Cesar Tadeu Pozzer
-//        pozzer@inf.ufsm.br
-//  Versao 09/2010
-//
-//**********************************************************
+// classe pra gerenciar a maioria dos botoes da interface, assim como os sliders
 
 #include "Interface.h"
 #include <string.h>
@@ -169,24 +162,27 @@ void Interface::render(int screenWidth, int screenHeight){
     CV::rectFill(0, screenHeight - grossuraBordasLateraisNasCamadas, bordaMenuLateralX, screenHeight);
     CV::color(0.5, 0.5, 0.5);
     CV::rectFill(inicioMenuLateralX, 0, screenWidth, screenHeight);
-    renderBotaoAdd();
-    renderBotaoClicar();
-    renderBotaoPincel();
-    renderBotaoSpray();
-    renderBotaoMarcaTexto();
-    renderBotaoBalde();
-    renderBotaoBorracha();
-    renderSliderR();
-    renderSliderG();
-    renderSliderB();
-    renderSliderRaio();
-    renderSliderBrilho();
-    renderSliderGama();
-    renderBotaoAddBrilho();
-    renderBotaoAddGama();
-    renderBotaoVertical();
-    renderBotaoHorizontal();
-    renderBotaoCinza();
+    renderBotao(botaoAddImagem, "Adicionar uma imagem/camada", false);
+    renderBotao(clicar, "Clck", false);
+    renderBotao(pincel, "Pncl", false);
+    renderBotao(spray, "Spry", false);
+    renderBotao(marcaTexto, "mcTx", false);
+    renderBotao(balde, "Blde", false);
+    renderBotao(borracha, "Lmpa", false);
+    renderBotao(fliperVertical, "FlpV", false);
+    renderBotao(fliperHorizontal, "FlpH", false);
+    renderBotao(tonsCinza, "Gray", false);
+    renderBotao(addBrilho, nullptr, true); 
+    renderBotao(addGama, nullptr, true);   
+
+
+    renderSlider(sliderR, "R: ");
+    renderSlider(sliderG, "G: ");
+    renderSlider(sliderB, "B: ");
+    renderSlider(sliderRaio, "Raio: ");
+    renderSlider(sliderBrilho, "Brilho: ");
+    renderSlider(sliderGama, "Gama: ");
+
     renderPreviewCor(screenWidth);
 
     if(submenuArquivos.aberto){
@@ -221,7 +217,7 @@ void Interface::renderFundo(){
     }
 }
 
-void Interface::renderBotao(BOTAO botao){
+void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) {
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(botao.borda1X, botao.borda1Y, botao.borda2X, botao.borda2Y);
 
@@ -229,7 +225,45 @@ void Interface::renderBotao(BOTAO botao){
         CV::color(0.9, 0.9, 0.9);
         CV::rect(botao.borda1X, botao.borda1Y, botao.borda2X, botao.borda2Y);
     }
+    
+    if (!isImage) {
+        CV::color(0.9, 0.9, 0.9);
+        CV::text(botao.borda1X + 5, (botao.borda1Y + botao.borda2Y) / 2 - 2, texto);
+    } 
+    else {
+        CV::color(0.9, 0.9, 0.9);
+        CV::rectFill(botao.borda1X + 5, (botao.borda1Y + botao.borda2Y) / 2 - 2, 
+                    botao.borda2X - 5, (botao.borda1Y + botao.borda2Y) / 2 + 2);
+        CV::rectFill((botao.borda1X + botao.borda2X) / 2 - 2, botao.borda1Y + 5, 
+                    (botao.borda1X + botao.borda2X) / 2 + 2, botao.borda2Y - 5);
+        
+    }
+}
 
+void Interface::renderSlider(Slider slider, const char* label, bool showValue) {
+    CV::color(0.3, 0.3, 0.3);
+    CV::rectFill(slider.inicioX, slider.Y, slider.fimX + 10, slider.Y + 10);
+    CV::color(0.9, 0.9, 0.9);
+    
+    float ratio = (float)(slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo);
+    int cursorPos = slider.inicioX + (slider.fimX - slider.inicioX) * ratio;
+    
+    CV::rectFill(cursorPos, slider.Y, cursorPos + 10, slider.Y + 10);
+    
+    if (label != nullptr) {
+        CV::color(0.9, 0.9, 0.9);
+        CV::text(slider.inicioX, slider.Y + 15, label);
+        
+        if (showValue) {
+            if (&slider == &sliderGama) {
+                char buffer[20];
+                sprintf(buffer, "%.1f", slider.valorAtual / 10.0);
+                CV::text(slider.fimX - 30, slider.Y + 15, buffer);
+            } else {
+                CV::text(slider.fimX - 30, slider.Y + 15, std::to_string(slider.valorAtual).c_str());
+            }
+        }
+    }
 }
 
 bool Interface::verificaClickBotao(BOTAO botao, int mouseX, int mouseY){
@@ -237,80 +271,6 @@ bool Interface::verificaClickBotao(BOTAO botao, int mouseX, int mouseY){
         return 1;
     }
     return 0;
-}
-
-void Interface::renderBotaoAdd(){
-    renderBotao(botaoAddImagem);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(botaoAddImagem.borda1X + 5, (botaoAddImagem.borda1Y + botaoAddImagem.borda2Y) /2 - 2, "Adicionar uma imagem/camada");
-}
-
-void Interface::renderBotaoClicar(){
-    renderBotao(clicar);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(clicar.borda1X + 5, (clicar.borda1Y + clicar.borda2Y) /2 - 2, "Clck");
-}
-
-void Interface::renderBotaoPincel(){
-    renderBotao(pincel);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(pincel.borda1X + 5, (pincel.borda1Y + pincel.borda2Y) /2 - 2, "Pncl");
-}
-
-void Interface::renderBotaoSpray(){
-    renderBotao(spray);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(spray.borda1X + 5, (spray.borda1Y + spray.borda2Y) /2 - 2, "Spry");
-}
-
-void Interface::renderBotaoMarcaTexto(){
-    renderBotao(marcaTexto);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(marcaTexto.borda1X + 5, (marcaTexto.borda1Y + marcaTexto.borda2Y) /2 - 2, "mcTx");
-}
-
-void Interface::renderBotaoBalde(){
-    renderBotao(balde);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(balde.borda1X + 5, (balde.borda1Y + balde.borda2Y) /2 - 2, "Blde");
-}
-
-void Interface::renderBotaoBorracha(){
-    renderBotao(borracha);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(borracha.borda1X + 5, (borracha.borda1Y + borracha.borda2Y) /2 - 2, "Lmpa");
-}
-
-void Interface::renderBotaoVertical(){
-    renderBotao(fliperVertical);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(fliperVertical.borda1X + 5, (fliperVertical.borda1Y + fliperVertical.borda2Y) /2 - 2, "FlpV");
-}
-
-void Interface::renderBotaoHorizontal(){
-    renderBotao(fliperHorizontal);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(fliperHorizontal.borda1X + 5, (fliperHorizontal.borda1Y + fliperHorizontal.borda2Y) /2 - 2, "FlpH");
-}
-
-void Interface::renderBotaoCinza() {
-    renderBotao(tonsCinza);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(tonsCinza.borda1X + 5, (tonsCinza.borda1Y + tonsCinza.borda2Y)/2 - 2, "Gray");
-}
-
-void Interface::renderBotaoAddBrilho(){
-    renderBotao(addBrilho);
-    CV::color(0.9, 0.9, 0.9);
-    CV::rectFill(addBrilho.borda1X + 5, (addBrilho.borda1Y + addBrilho.borda2Y) /2 - 2, addBrilho.borda2X - 5, (addBrilho.borda1Y + addBrilho.borda2Y) /2 + 2);
-    CV::rectFill((addBrilho.borda1X + addBrilho.borda2X) / 2 - 2, addBrilho.borda1Y + 5, (addBrilho.borda1X + addBrilho.borda2X) / 2 + 2, addBrilho.borda2Y - 5);
-}
-
-void Interface::renderBotaoAddGama(){
-    renderBotao(addGama);
-    CV::color(0.9, 0.9, 0.9);
-    CV::rectFill(addGama.borda1X + 5, (addGama.borda1Y + addGama.borda2Y) /2 - 2, addGama.borda2X - 5, (addGama.borda1Y + addGama.borda2Y) /2 + 2);
-    CV::rectFill((addGama.borda1X + addGama.borda2X) / 2 - 2, addGama.borda1Y + 5, (addGama.borda1X + addGama.borda2X) / 2 + 2, addGama.borda2Y - 5);
 }
 
 BOTAO Interface::getBotaoAddImagem(){
@@ -470,53 +430,6 @@ unsigned char *Interface::getRGBA(){
 
 int Interface::getRaioCor(){
     return raioCor;
-}
-
-void Interface::renderSlider(Slider slider){
-    CV::color(0.3, 0.3, 0.3);
-    CV::rectFill(slider.inicioX, slider.Y, slider.fimX + 10, slider.Y + 10);
-    CV::color(0.9, 0.9, 0.9);
-    CV::rectFill(slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo), slider.Y, slider.inicioX + (slider.fimX - slider.inicioX) * (slider.valorAtual - slider.valorMinimo) / (slider.valorMaximo - slider.valorMinimo) + 10, slider.Y + 10);
-}
-
-void Interface::renderSliderR(){
-    renderSlider(sliderR);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderR.inicioX, sliderR.Y + 15, "R: ");
-    CV::text(sliderR.fimX - 30, sliderR.Y + 15, std::to_string(sliderR.valorAtual).c_str());
-}
-void Interface::renderSliderG(){
-    renderSlider(sliderG);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderG.inicioX, sliderG.Y + 15, "G: ");
-    CV::text(sliderG.fimX - 30, sliderG.Y + 15, std::to_string(sliderG.valorAtual).c_str());
-}
-void Interface::renderSliderB(){
-    renderSlider(sliderB);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderB.inicioX, sliderB.Y + 15, "B: ");
-    CV::text(sliderB.fimX - 30, sliderB.Y + 15, std::to_string(sliderB.valorAtual).c_str());
-}
-
-void Interface::renderSliderRaio(){
-    renderSlider(sliderRaio);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderRaio.inicioX, sliderRaio.Y + 15, "Raio: ");
-    CV::text(sliderRaio.fimX - 30, sliderRaio.Y + 15, std::to_string(sliderRaio.valorAtual).c_str());
-}
-
-void Interface::renderSliderBrilho(){
-    renderSlider(sliderBrilho);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderBrilho.inicioX, sliderBrilho.Y + 15, "Brilho: ");
-    CV::text(sliderBrilho.fimX - 30, sliderBrilho.Y + 15, std::to_string(sliderBrilho.valorAtual).c_str());
-}
-
-void Interface::renderSliderGama(){
-    renderSlider(sliderGama);
-    CV::color(0.9, 0.9, 0.9);
-    CV::text(sliderGama.inicioX, sliderGama.Y + 15, "Gama: ");
-    CV::text(sliderGama.fimX - 30, sliderGama.Y + 15, std::to_string((sliderGama.valorAtual / 10.0)).c_str());
 }
 
 bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){
