@@ -8,6 +8,7 @@
 #include <time.h>
 
 
+
 gerenciadorCamadas::gerenciadorCamadas(int grossuraBordasLateraisNasCamadas, int bordaMenuLateralX, int screenHeight, int screenWidth, int inicioMenuLateralX)
 {
     borda1X = grossuraBordasLateraisNasCamadas;
@@ -490,21 +491,17 @@ void gerenciadorCamadas::ajustarContraste(int valorContraste){ // add contraste
     }
 }
 
-void gerenciadorCamadas::aplicarBlurGaussiano(int raio){
-    // Criar uma cópia temporária da camada para não perder dados durante o processamento
+void gerenciadorCamadas::aplicarBlurGaussiano(int raio){ // blur gaussiano
     unsigned char* tempCamada = new unsigned char[width * height * 4];
     memcpy(tempCamada, camadas[camadaAtiva].camada, width * height * 4);
     
-    // Tamanho do kernel (deve ser ímpar)
     int tamanhoKernel = 2 * raio + 1;
     
-    // Criar o kernel gaussiano
     float* kernel = new float[tamanhoKernel * tamanhoKernel];
-    float sigma = raio / 2.0f;
-    float soma = 0.0f;
-    float fatorNormalizacao = 1.0f / (2.0f * 3.14159f * sigma * sigma);
+    float sigma = (float)raio / 2;
+    float soma = 0;
+    float fatorNormalizacao = 1.0 / (2.0 * PI * sigma * sigma);
     
-    // Preencher o kernel com os valores da distribuição gaussiana
     for (int y = -raio; y <= raio; y++) {
         for (int x = -raio; x <= raio; x++) {
             int idx = (y + raio) * tamanhoKernel + (x + raio);
@@ -513,34 +510,28 @@ void gerenciadorCamadas::aplicarBlurGaussiano(int raio){
         }
     }
     
-    // Normalizar o kernel
     for (int i = 0; i < tamanhoKernel * tamanhoKernel; i++) {
         kernel[i] /= soma;
     }
     
-    // Aplicar o filtro na imagem
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int posDestino = (y * width + x) * 4;
             
-            // Pular pixels transparentes
             if (camadas[camadaAtiva].camada[posDestino + 3] == 0)
                 continue;
                 
             float r = 0, g = 0, b = 0;
             float pesoTotal = 0;
             
-            // Aplicar convolução
             for (int ky = -raio; ky <= raio; ky++) {
                 for (int kx = -raio; kx <= raio; kx++) {
                     int posX = x + kx;
                     int posY = y + ky;
                     
-                    // Garantir que não saímos da imagem
                     if (posX >= 0 && posX < width && posY >= 0 && posY < height) {
                         int posFonte = (posY * width + posX) * 4;
                         
-                        // Só considerar pixels visíveis
                         if (tempCamada[posFonte + 3] != 0) {
                             int idxKernel = (ky + raio) * tamanhoKernel + (kx + raio);
                             float peso = kernel[idxKernel];
@@ -554,7 +545,6 @@ void gerenciadorCamadas::aplicarBlurGaussiano(int raio){
                 }
             }
             
-            // Normalizar pelo peso total
             if (pesoTotal > 0) {
                 camadas[camadaAtiva].camada[posDestino] = (unsigned char)(r / pesoTotal);
                 camadas[camadaAtiva].camada[posDestino + 1] = (unsigned char)(g / pesoTotal);
@@ -565,4 +555,128 @@ void gerenciadorCamadas::aplicarBlurGaussiano(int raio){
     
     delete[] kernel;
     delete[] tempCamada;
+}
+
+void gerenciadorCamadas::salvarEstado(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "wb");
+    if (!arquivo) {
+        printf("Erro ao abrir arquivo para salvar estado\n");
+        return;
+    }
+
+    // header, salva informacoes basicas
+    fwrite(&camadaAtiva, sizeof(int), 1, arquivo);
+    fwrite(&qntCamadas, sizeof(int), 1, arquivo);
+    fwrite(&width, sizeof(int), 1, arquivo);
+    fwrite(&height, sizeof(int), 1, arquivo);
+
+    // salva cada camada
+    for (int i = 0; i < qntCamadas; i++) {
+        fwrite(&camadas[i].visivel, sizeof(bool), 1, arquivo);
+        fwrite(camadas[i].camada, sizeof(unsigned char), width * height * 4, arquivo);
+    }
+
+    // salva cada botão de camada
+    for (int i = 0; i < qntCamadas; i++) {
+        fwrite(&botaoCamadas[i].posCamada, sizeof(int), 1, arquivo);
+        
+        fwrite(botaoCamadas[i].nome, sizeof(char), 50, arquivo);
+        
+        fwrite(&botaoCamadas[i].borda1X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].borda1Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].borda2X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].borda2Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].bordaHideX, sizeof(int), 1, arquivo);
+        
+        fwrite(&botaoCamadas[i].moveCima.borda1X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveCima.borda1Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveCima.borda2X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveCima.borda2Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveCima.cima, sizeof(bool), 1, arquivo);
+        
+        fwrite(&botaoCamadas[i].moveBaixo.borda1X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveBaixo.borda1Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveBaixo.borda2X, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveBaixo.borda2Y, sizeof(int), 1, arquivo);
+        fwrite(&botaoCamadas[i].moveBaixo.cima, sizeof(bool), 1, arquivo);
+    }
+
+    fclose(arquivo);
+    printf("Estado salvo com sucesso em %s\n", nomeArquivo);
+}
+
+void gerenciadorCamadas::carregarEstado(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "rb");
+    if (!arquivo) {
+        printf("Erro ao abrir arquivo para carregar estado\n");
+        return;
+    }
+
+    for (int i = 0; i < qntCamadas; i++) {
+        delete[] camadas[i].camada;
+    }
+    camadas.clear();
+    botaoCamadas.clear();
+
+    // carrega camadaAtiva e qntCamadas, usa isso pra ler o resto
+    fread(&camadaAtiva, sizeof(int), 1, arquivo);
+    int novoQntCamadas;
+    fread(&novoQntCamadas, sizeof(int), 1, arquivo);
+    
+    int novoWidth, novoHeight;
+    fread(&novoWidth, sizeof(int), 1, arquivo);
+    fread(&novoHeight, sizeof(int), 1, arquivo);
+    
+    if (novoWidth != width || novoHeight != height) {
+        printf("Aviso: Dimensões do arquivo (%dx%d) diferentes das atuais (%dx%d)\n", 
+               novoWidth, novoHeight, width, height);
+        fclose(arquivo);
+        return;
+    }
+
+    // carrega cada camada, utilizando os valores do header
+    for (int i = 0; i < novoQntCamadas; i++) {
+        Camada novaCamada;
+        
+        fread(&novaCamada.visivel, sizeof(bool), 1, arquivo);
+        
+        novaCamada.camada = new unsigned char[width * height * 4];
+        fread(novaCamada.camada, sizeof(unsigned char), width * height * 4, arquivo);
+        
+        camadas.push_back(novaCamada);
+    }
+
+    // carrega cada botão de camada, utilizando os valores do header
+    for (int i = 0; i < novoQntCamadas; i++) {
+        BotaoCamadas novoBotao;
+        
+        fread(&novoBotao.posCamada, sizeof(int), 1, arquivo);
+        
+        fread(novoBotao.nome, sizeof(char), 50, arquivo);
+        
+        fread(&novoBotao.borda1X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.borda1Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.borda2X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.borda2Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.bordaHideX, sizeof(int), 1, arquivo);
+        
+        fread(&novoBotao.moveCima.borda1X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveCima.borda1Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveCima.borda2X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveCima.borda2Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveCima.cima, sizeof(bool), 1, arquivo);
+        
+        fread(&novoBotao.moveBaixo.borda1X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveBaixo.borda1Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveBaixo.borda2X, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveBaixo.borda2Y, sizeof(int), 1, arquivo);
+        fread(&novoBotao.moveBaixo.cima, sizeof(bool), 1, arquivo);
+        
+        botaoCamadas.push_back(novoBotao);
+    }
+
+    qntCamadas = novoQntCamadas;
+    
+    fclose(arquivo);
+    printf("Estado carregado com sucesso de %s\n", nomeArquivo);
 }

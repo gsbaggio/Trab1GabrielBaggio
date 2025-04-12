@@ -145,11 +145,11 @@ bool verificaClickBotaoInterface(int x, int y){ // funcao pra tratar os clicks n
         return 1;
     }
     else if(interface->verificaClickBotao(interface->getBotaoSave(), x, y)){
-        gCamadas->salvarEstado("state.txt");
+        gCamadas->salvarEstado(".\\Trab1GabrielBaggio\\state.txt");
         return 1;
     }
     else if(interface->verificaClickBotao(interface->getBotaoLoad(), x, y)){
-        gCamadas->carregarEstado("state.txt");
+        gCamadas->carregarEstado(".\\Trab1GabrielBaggio\\state.txt");
         return 1;
     }
     return 0;

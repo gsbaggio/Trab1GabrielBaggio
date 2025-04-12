@@ -63,6 +63,8 @@ public:
    void adicionarGama(int valorGama);
    void ajustarContraste(int valorContraste);
    void aplicarBlurGaussiano(int raio);
+   void salvarEstado(const char* nomeArquivo);
+   void carregarEstado(const char* nomeArquivo);
 };
 
 #endif
