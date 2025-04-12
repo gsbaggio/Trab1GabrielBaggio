@@ -114,14 +114,6 @@ public:
     void setSegurandoRaio(bool segurando);
     void setSegurandoBrilho(bool segurando);
     void setSegurandoGama(bool segurando);
-    int getValorBrilho();
-    int getValorGama();
-    bool getSegurandoR();
-    bool getSegurandoG();
-    bool getSegurandoB();
-    bool getSegurandoRaio();
-    bool getSegurandoBrilho();
-    bool getSegurandoGama();
     void mudaValorSliderR(int mouseX);
     void mudaValorSliderG(int mouseX);
     void mudaValorSliderB(int mouseX);

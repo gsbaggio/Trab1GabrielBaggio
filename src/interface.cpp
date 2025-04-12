@@ -9,7 +9,7 @@
 #define alturaBotoesClick 30
 #define distanciaEntreBotoesClick 5
 
-Interface::Interface(int screenWidth, int screenHeight)
+Interface::Interface(int screenWidth, int screenHeight) // carrega todos os botoes e interface
 {
     bordaMenuLateralX = screenWidth * 3 / 4;
     grossuraBordasLateraisNasCamadas = 10;
@@ -153,7 +153,7 @@ Interface::Interface(int screenWidth, int screenHeight)
     RGBA[3] = 1;
 }
 
-void Interface::render(int screenWidth, int screenHeight){
+void Interface::render(int screenWidth, int screenHeight){ // funcao 'main' da interface, renderiza tudo
     renderFundo();
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(bordaMenuLateralX, 0, bordaMenuLateralX + grossuraBordasLateraisNasCamadas, screenHeight);
@@ -198,7 +198,7 @@ int Interface::getGrossuraBordasLaterais(){
     return grossuraBordasLateraisNasCamadas;
 }
 
-void Interface::renderFundo(){
+void Interface::renderFundo(){ // renderiza aqueles quadriculados cinzas
     int i, j;
     int linha = 0, coluna;
     for(i = borda1Y; i < borda2Y; i += tamanhoLadoQuadradosFundo){
@@ -217,7 +217,7 @@ void Interface::renderFundo(){
     }
 }
 
-void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) {
+void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) { // funcao generica pra renderizar um botao
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(botao.borda1X, botao.borda1Y, botao.borda2X, botao.borda2Y);
 
@@ -240,7 +240,7 @@ void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) {
     }
 }
 
-void Interface::renderSlider(Slider slider, const char* label, bool showValue) {
+void Interface::renderSlider(Slider slider, const char* label, bool showValue) { // funcao generica pra renderizar um slider
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(slider.inicioX, slider.Y, slider.fimX + 10, slider.Y + 10);
     CV::color(0.9, 0.9, 0.9);
@@ -266,12 +266,14 @@ void Interface::renderSlider(Slider slider, const char* label, bool showValue) {
     }
 }
 
-bool Interface::verificaClickBotao(BOTAO botao, int mouseX, int mouseY){
+bool Interface::verificaClickBotao(BOTAO botao, int mouseX, int mouseY){ // funcao generica pra verifica click no botao
     if(mouseX > botao.borda1X && mouseX < botao.borda2X && mouseY > botao.borda1Y && mouseY < botao.borda2Y){
         return 1;
     }
     return 0;
 }
+
+// esses gets precisaram ser feitos pois cada botao é privado
 
 BOTAO Interface::getBotaoAddImagem(){
     return botaoAddImagem;
@@ -321,7 +323,7 @@ BOTAO Interface::getBotaoAddGama(){
     return addGama;
 }
 
-void Interface::alteraBotaoSelecionado(int botaoSelecionado){
+void Interface::alteraBotaoSelecionado(int botaoSelecionado){ // esse aqui altera qual botao está selecionado (pincel, spray, etc), e muda a borda dele
     this->botaoSelecionado = botaoSelecionado;
     clicar.tem_borda = 0;
     pincel.tem_borda = 0;
@@ -352,7 +354,7 @@ void Interface::alteraBotaoSelecionado(int botaoSelecionado){
     }
 }
 
-void Interface::carregarNomeArquivos(){
+void Interface::carregarNomeArquivos(){ // carrega os arquivos da pasta image
     struct dirent *entry;
     DIR *dp = opendir(".\\Trab1GabrielBaggio\\images");
 
@@ -373,7 +375,7 @@ void Interface::carregarNomeArquivos(){
     closedir(dp);
 }
 
-void Interface::renderSubmenuArquivos(){
+void Interface::renderSubmenuArquivos(){ // renderiza aquele submenu de arquivos
     int i = 0;
     CV::color(0.2, 0.2, 0.2);
     CV::rectFill(submenuArquivos.borda1X, submenuArquivos.borda1Y, submenuArquivos.borda2X, submenuArquivos.borda2Y);
@@ -384,7 +386,7 @@ void Interface::renderSubmenuArquivos(){
     }
 }
 
-void Interface::setAbertoSubmenuArquivos(bool aberto, int mouseX, int mouseY){
+void Interface::setAbertoSubmenuArquivos(bool aberto, int mouseX, int mouseY){ // abre ou fecha o submenu de arquivos
     submenuArquivos.aberto = aberto;
     submenuArquivos.borda1X = mouseX;
     submenuArquivos.borda1Y = mouseY - qntArquivos * 10;
@@ -400,14 +402,14 @@ Submenu Interface::getSubmenuArquivos(){
     return submenuArquivos;
 }
 
-bool Interface::verificaClickSubmenu(Submenu submenu, int mouseX, int mouseY){
+bool Interface::verificaClickSubmenu(Submenu submenu, int mouseX, int mouseY){ // verifica se clicou dentro ou fora do submenu de arquivos
     if(mouseX > submenu.borda1X && mouseX < submenu.borda2X && mouseY > submenu.borda1Y && mouseY < submenu.borda2Y){
         return 1;
     }
     return 0;
 }
 
-std::string Interface::verificaArquivoParaAbrir(int mouseX, int mouseY){
+std::string Interface::verificaArquivoParaAbrir(int mouseX, int mouseY){ // busca no click qual arquivo vai carregar na nova camada
     for(BotaoArquivo botaoArquivo : botaoArquivos){
         if(mouseX > submenuArquivos.borda1X - 2 && mouseX < submenuArquivos.borda2X + 2 && mouseY > submenuArquivos.borda1Y + botaoArquivo.deltaY - 2 && mouseY < submenuArquivos.borda1Y + botaoArquivo.deltaY + tamanhoBotaoArquivos + 2){
             return botaoArquivo.nome;
@@ -439,6 +441,8 @@ bool Interface::verificaSegurandoSlider(Slider slider, int mouseX, int mouseY){
     return 0;
 }
 
+// foi preciso fazer todos esses gets por causa que é privado
+
 Slider Interface::getSliderR(){
     return sliderR;
 }
@@ -459,6 +463,8 @@ Slider Interface::getSliderBrilho(){
 Slider Interface::getSliderGama(){
     return sliderGama;
 }
+
+// não, não tem como fazer uma função generica pra settar o segurando de um slider, pois não tem como pegar o endereço dele por ser privado
 
 void Interface::setSegurandoR(bool segurando){
     sliderR.segurando = segurando;
@@ -481,37 +487,7 @@ void Interface::setSegurandoGama(bool segurando){
     sliderGama.segurando = segurando;
 }
 
-bool Interface::getSegurandoR(){
-    return sliderR.segurando;
-}
-
-bool Interface::getSegurandoG(){
-    return sliderG.segurando;
-}
-
-bool Interface::getSegurandoB(){
-    return sliderB.segurando;
-}
-
-bool Interface::getSegurandoRaio(){
-    return sliderRaio.segurando;
-}
-
-bool Interface::getSegurandoBrilho(){
-    return sliderBrilho.segurando;
-}
-
-bool Interface::getSegurandoGama(){
-    return sliderGama.segurando;
-}
-
-int Interface::getValorBrilho(){
-    return sliderBrilho.valorAtual;
-}
-
-int Interface::getValorGama(){
-    return sliderGama.valorAtual;
-}
+// precisa ter todos esses aqui msm pra mudar pq ele nao consegue acessar fora
 
 void Interface::mudaValorSliderR(int mouseX){
     int valor = (sliderR.valorMaximo - sliderR.valorMinimo) * (mouseX - sliderR.inicioX) / (sliderR.fimX - sliderR.inicioX) + sliderR.valorMinimo;
@@ -583,7 +559,7 @@ void Interface::mudaValorSliderGama(int mouseX){
     sliderGama.valorAtual = valor;
 }
 
-void Interface::renderPreviewCor(int screenWidth){
+void Interface::renderPreviewCor(int screenWidth){ // renderiza aquela corzinha que vai pintar
     CV::color(0.3, 0.3, 0.3);
     CV::rect(sliderRaio.fimX + 15, sliderRaio.Y, screenWidth - 5, sliderR.Y + 15);
     CV::color((float)RGBA[0] / 255, (float)RGBA[1] / 255, (float)RGBA[2] / 255);

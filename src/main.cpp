@@ -1,5 +1,40 @@
 // código da main do programa, serve pra captar mouse e chamar as outras funções, assim como chamar os render
 
+// O que foi feito:
+// Programa pode carregar imagens de qualquer tamanho;
+// Tem o menu lateral;
+// Camadas com transparencia binária;
+// O plano de fundo é quadriculado para ajudar a visualizar as camadas;
+// O pragrama permite pintar com qualquer cor e diversas ferramentas, na camada ativa, que é representada com uma borda mais grossa;
+// É possível reordenar as camdass, ativar e desativar elas;
+// Existe varias checkbox e varios sliders;
+// Efeitos de flip vertical e flip horizontal, assim como efeito de controle de brilho adicionado.
+
+// Bônus:
+// Efeitos tons de cinza, correção de gama, contraste e desfoque gaussiano;
+// Diferentes tipos de pintar com o mouse: pincel, spray, marca texto, balde e borracha;
+// Save e Load do estado do programa, com todas as camadas e efeitos aplicados, assim como posições da interface.
+
+// Explicação de como utilizar o programa:
+// Para carregar um arquivo novo, clique no botão escrito "Adicionar uma imagem/camada" e escolha o arquivo desejado (listará todos os arquivos .bmp na pasta images);
+// Para pintar, selecione o botão do efeito: 'Pncl' = 'Pincel', 'Spry' = 'Spray', 'mcTx' = 'Marca Texto', 'Blde' = 'Balde', 'Lmpa' = 'Borracha';
+// O botão 'Clck' server só pra clicar sem aplicar nada;
+// Escolha a cor mexendo nos sliders de R, G e B;
+// Mude o raio do pincel, spray e marca texto mexendo no slider de Raio;
+// O botão 'FlpV' faz flip vertical e o 'FlpH' faz flip horizontal;
+// Altere o valor no slider 'Brilho' e clique no botão '+' ao lado dele para adicionar brilho;
+// Altere o valor no slider 'Gama' e clique no botão '+' ao lado dele para adicionar correção de gama;
+// Altere o valor no slider 'Contraste' e clique no botão '+' ao lado dele para adicionar contraste;
+// Altere o valor no slider 'Desfoque' e clique no botão '+' ao lado dele para adicionar desfoque gaussiano;
+// Clique no botão 'Gray' para aplicar tons de cinza na camada ativa;
+// Save salvará o estado do programa no arquivo 'state.txt' e Load carregará o estado do programa a partir desse arquivo;
+// Após adicionar uma camada, clique em 'Hide' para esconder. Se ja estiver marcado, vai desmarcar;
+// Clique no botão da camada para torná-la ativa, vai ficar destacado a ativa;
+// Clique na seta pra cima ou pra baixo para reordenar as camadas.
+
+// O que possívelmente teria que fazer para funcionar?
+// O path em 'interface.cpp', na função 'carregarNomeArquivos', tem que ser alterado para o path correto do windows, mas acho que ja vai funcionar.
+
 #include <GL/glut.h>
 #include <GL/freeglut_ext.h> //callback da wheel do mouse.
 
@@ -114,11 +149,11 @@ bool verificaClickBotaoInterface(int x, int y){ // funcao pra tratar os clicks n
 
 bool verificaClickAddEfeito(int x, int y){ // funcao pra tratar os clicks nas aplicacoes de efeitos
     if(interface->verificaClickBotao(interface->getBotaoAddBrilho(), x, y) && gCamadas->getQntCamadas() > 0){
-        gCamadas->adicionarBrilho(interface->getValorBrilho());
+        gCamadas->adicionarBrilho(interface->getSliderBrilho().valorAtual);
         return 1;
     }
     else if(interface->verificaClickBotao(interface->getBotaoAddGama(), x, y) && gCamadas->getQntCamadas() > 0){
-        gCamadas->adicionarGama(interface->getValorGama());
+        gCamadas->adicionarGama(interface->getSliderGama().valorAtual);
         return 1;
     }
     else if(interface->verificaClickBotao(interface->getBotaoVertical(), x, y) && gCamadas->getQntCamadas() > 0){
@@ -174,22 +209,22 @@ void trataDrags(int x, int y){  // trata a movimentacao do mouse quando tem um d
     if(gCamadas->getPintando() && gCamadas->verificaMouseCamada(x, y) && gCamadas->getQntCamadas() > 0){
         gCamadas->pintarCamada(x, y, interface->getRGBA(), interface->getBotaoSelecionado(), interface->getRaioCor());
     }
-    else if(interface->getSegurandoR()){
+    else if(interface->getSliderR().segurando){
         interface->mudaValorSliderR(x);
     }
-    else if(interface->getSegurandoG()){
+    else if(interface->getSliderG().segurando){
         interface->mudaValorSliderG(x);
     }
-    else if(interface->getSegurandoB()){
+    else if(interface->getSliderB().segurando){
         interface->mudaValorSliderB(x);
     }
-    else if(interface->getSegurandoRaio()){
+    else if(interface->getSliderRaio().segurando){
         interface->mudaValorSliderRaio(x);
     }
-    else if(interface->getSegurandoBrilho()){
+    else if(interface->getSliderBrilho().segurando){
         interface->mudaValorSliderBrilho(x);
     }
-    else if(interface->getSegurandoGama()){
+    else if(interface->getSliderGama().segurando){
         interface->mudaValorSliderGama(x);
     }
 }

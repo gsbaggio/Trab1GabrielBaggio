@@ -1,10 +1,11 @@
+// essa classe aqui serve pra carregar os arquivos .bmp, peguei de exemplo o que o pozzer deu pra nós pra nao fazer do zero
+
 #include "Bmp.h"
 #include <string.h>
 #include <algorithm>
 #include "gl_canvas2d.h"
 #include <iostream>
 
-// Construtor da classe Bmp. Carrega uma imagem BMP do arquivo especificado.
 Bmp::Bmp(const char *fileName)
 {
    width = height = 0;
@@ -19,43 +20,36 @@ Bmp::Bmp(const char *fileName)
    }
 }
 
-// Retorna um ponteiro para os dados da imagem.
 uchar* Bmp::getImage()
 {
    return data;
 }
 
-// Define os dados da imagem.
 void Bmp::setImage(uchar* img)
 {
    this->data = img;
 }
 
-// Retorna a largura da imagem.
 int Bmp::getWidth(void)
 {
    return width;
 }
 
-// Define a largura da imagem.
 void Bmp::setWidth(int w)
 {
    this->width = w;
 }
 
-// Retorna a altura da imagem.
 int Bmp::getHeight(void)
 {
    return height;
 }
 
-// Define a altura da imagem.
 void Bmp::setHeight(int h)
 {
    this->height = h;
 }
 
-// Converte a imagem de BGR para RGB.
 void Bmp::convertBGRtoRGB()
 {
    unsigned char tmp;
@@ -72,7 +66,6 @@ void Bmp::convertBGRtoRGB()
    }
 }
 
-// Carrega uma imagem BMP do arquivo especificado.
 void Bmp::load(const char *fileName)
 {
    FILE *fp = fopen(fileName, "rb");
