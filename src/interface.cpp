@@ -110,9 +110,9 @@ Interface::Interface(int screenWidth, int screenHeight) // carrega todos os boto
     sliderGama.inicioX = inicioMenuLateralX + 5;
     sliderGama.fimX = balde.borda2X - 60;
     sliderGama.Y = sliderBrilho.Y - 35;
-    sliderGama.valorMinimo = 2;
-    sliderGama.valorMaximo = 50;
-    sliderGama.valorAtual = 10;
+    sliderGama.valorMinimo = 20; // esse valor vai ser dividido por 100
+    sliderGama.valorMaximo = 500; // esse valor vai ser dividido por 100
+    sliderGama.valorAtual = 100; // esse valor vai ser dividido por 100
     sliderGama.segurando = 0;
 
     addBrilho.borda1X = sliderBrilho.fimX + 15;
@@ -145,6 +145,46 @@ Interface::Interface(int screenWidth, int screenHeight) // carrega todos os boto
     tonsCinza.borda2Y = tonsCinza.borda1Y + alturaBotoesClick;
     tonsCinza.tem_borda = 1;
 
+    save.borda1X = sliderRaio.fimX + 15;
+    save.borda1Y = tonsCinza.borda1Y - 18;
+    save.borda2X = screenWidth - 5;
+    save.borda2Y = save.borda1Y + 13;
+    save.tem_borda = 1;
+
+    load.borda1X = sliderRaio.fimX + 15;
+    load.borda1Y = save.borda1Y - 18;
+    load.borda2X = screenWidth - 5;
+    load.borda2Y = load.borda1Y + 13;
+    load.tem_borda = 1;
+
+    sliderContraste.inicioX = inicioMenuLateralX + 5;
+    sliderContraste.fimX = balde.borda2X - 60;
+    sliderContraste.Y = sliderGama.Y - 35;
+    sliderContraste.valorMinimo = 0; // esse valor vai ser dividido por 100
+    sliderContraste.valorMaximo = 200; // esse valor vai ser dividido por 100
+    sliderContraste.valorAtual = 100; // esse valor vai ser dividido por 100
+    sliderContraste.segurando = 0;
+
+    addContraste.borda1X = sliderContraste.fimX + 15;
+    addContraste.borda1Y = sliderContraste.Y;
+    addContraste.borda2X = addContraste.borda1X + larguraBotoesClick;
+    addContraste.borda2Y = sliderContraste.Y + alturaBotoesClick;
+    addContraste.tem_borda = 1;
+
+    sliderBlur.inicioX = inicioMenuLateralX + 5;
+    sliderBlur.fimX = balde.borda2X - 60;
+    sliderBlur.Y = sliderContraste.Y - 35;
+    sliderBlur.valorMinimo = 1;
+    sliderBlur.valorMaximo = 15;
+    sliderBlur.valorAtual = 3;
+    sliderBlur.segurando = 0;
+
+    addBlur.borda1X = sliderBlur.fimX + 15;
+    addBlur.borda1Y = sliderBlur.Y;
+    addBlur.borda2X = addBlur.borda1X + larguraBotoesClick;
+    addBlur.borda2Y = sliderBlur.Y + alturaBotoesClick;
+    addBlur.tem_borda = 1;
+
     botaoSelecionado = 0;
     raioCor = 10;
     RGBA[0] = 255;
@@ -173,15 +213,20 @@ void Interface::render(int screenWidth, int screenHeight){ // funcao 'main' da i
     renderBotao(fliperHorizontal, "FlpH", false);
     renderBotao(tonsCinza, "Gray", false);
     renderBotao(addBrilho, nullptr, true); 
-    renderBotao(addGama, nullptr, true);   
-
+    renderBotao(addGama, nullptr, true);  
+    renderBotao(addContraste, nullptr, true); 
+    renderBotao(addBlur, nullptr, true);
+    renderBotao(save, "Save", false);
+    renderBotao(load, "Load", false);
 
     renderSlider(sliderR, "R: ");
     renderSlider(sliderG, "G: ");
     renderSlider(sliderB, "B: ");
     renderSlider(sliderRaio, "Raio: ");
     renderSlider(sliderBrilho, "Brilho: ");
-    renderSlider(sliderGama, "Gama: ");
+    renderSlider(sliderGama, "Gama: ", true, true);
+    renderSlider(sliderContraste, "Contraste: ", true, true);
+    renderSlider(sliderBlur, "Desfoque: ");
 
     renderPreviewCor(screenWidth);
 
@@ -217,7 +262,7 @@ void Interface::renderFundo(){ // renderiza aqueles quadriculados cinzas
     }
 }
 
-void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) { // funcao generica pra renderizar um botao
+void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage){ // funcao generica pra renderizar um botao
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(botao.borda1X, botao.borda1Y, botao.borda2X, botao.borda2Y);
 
@@ -240,7 +285,7 @@ void Interface::renderBotao(BOTAO botao, const char* texto, bool isImage) { // f
     }
 }
 
-void Interface::renderSlider(Slider slider, const char* label, bool showValue) { // funcao generica pra renderizar um slider
+void Interface::renderSlider(Slider slider, const char* texto, bool mostrarValor, bool porcentagem){ // funcao generica pra renderizar um slider
     CV::color(0.3, 0.3, 0.3);
     CV::rectFill(slider.inicioX, slider.Y, slider.fimX + 10, slider.Y + 10);
     CV::color(0.9, 0.9, 0.9);
@@ -250,14 +295,14 @@ void Interface::renderSlider(Slider slider, const char* label, bool showValue) {
     
     CV::rectFill(cursorPos, slider.Y, cursorPos + 10, slider.Y + 10);
     
-    if (label != nullptr) {
+    if (texto != nullptr) {
         CV::color(0.9, 0.9, 0.9);
-        CV::text(slider.inicioX, slider.Y + 15, label);
+        CV::text(slider.inicioX, slider.Y + 15, texto);
         
-        if (showValue) {
-            if (&slider == &sliderGama) {
+        if (mostrarValor) {
+            if (porcentagem) {
                 char buffer[20];
-                sprintf(buffer, "%.1f", slider.valorAtual / 10.0);
+                sprintf(buffer, "%.1f", slider.valorAtual / 100.0);
                 CV::text(slider.fimX - 30, slider.Y + 15, buffer);
             } else {
                 CV::text(slider.fimX - 30, slider.Y + 15, std::to_string(slider.valorAtual).c_str());
@@ -321,6 +366,22 @@ BOTAO Interface::getBotaoAddBrilho(){
 
 BOTAO Interface::getBotaoAddGama(){
     return addGama;
+}
+
+BOTAO Interface::getBotaoAddContraste(){
+    return addContraste;
+}
+
+BOTAO Interface::getBotaoAddBlur(){
+    return addBlur;
+}
+
+BOTAO Interface::getBotaoSave(){
+    return save;
+}
+
+BOTAO Interface::getBotaoLoad(){
+    return load;
 }
 
 void Interface::alteraBotaoSelecionado(int botaoSelecionado){ // esse aqui altera qual botao está selecionado (pincel, spray, etc), e muda a borda dele
@@ -464,6 +525,14 @@ Slider Interface::getSliderGama(){
     return sliderGama;
 }
 
+Slider Interface::getSliderContraste(){
+    return sliderContraste;
+}
+
+Slider Interface::getSliderBlur(){
+    return sliderBlur;
+}
+
 // não, não tem como fazer uma função generica pra settar o segurando de um slider, pois não tem como pegar o endereço dele por ser privado
 
 void Interface::setSegurandoR(bool segurando){
@@ -485,6 +554,14 @@ void Interface::setSegurandoBrilho(bool segurando){
 
 void Interface::setSegurandoGama(bool segurando){
     sliderGama.segurando = segurando;
+}
+
+void Interface::setSegurandoContraste(bool segurando){
+    sliderContraste.segurando = segurando;
+}
+
+void Interface::setSegurandoBlur(bool segurando){
+    sliderBlur.segurando = segurando;
 }
 
 // precisa ter todos esses aqui msm pra mudar pq ele nao consegue acessar fora
@@ -557,6 +634,28 @@ void Interface::mudaValorSliderGama(int mouseX){
         valor = sliderGama.valorMinimo;
     }
     sliderGama.valorAtual = valor;
+}
+
+void Interface::mudaValorSliderContraste(int mouseX){
+    int valor = (sliderContraste.valorMaximo - sliderContraste.valorMinimo) * (mouseX - sliderContraste.inicioX) / (sliderContraste.fimX - sliderContraste.inicioX) + sliderContraste.valorMinimo;
+    if(valor > sliderContraste.valorMaximo){
+        valor = sliderContraste.valorMaximo;
+    }
+    if(valor < sliderContraste.valorMinimo){
+        valor = sliderContraste.valorMinimo;
+    }
+    sliderContraste.valorAtual = valor;
+}
+
+void Interface::mudaValorSliderBlur(int mouseX){
+    int valor = (sliderBlur.valorMaximo - sliderBlur.valorMinimo) * (mouseX - sliderBlur.inicioX) / (sliderBlur.fimX - sliderBlur.inicioX) + sliderBlur.valorMinimo;
+    if(valor > sliderBlur.valorMaximo){
+        valor = sliderBlur.valorMaximo;
+    }
+    if(valor < sliderBlur.valorMinimo){
+        valor = sliderBlur.valorMinimo;
+    }
+    sliderBlur.valorAtual = valor;
 }
 
 void Interface::renderPreviewCor(int screenWidth){ // renderiza aquela corzinha que vai pintar

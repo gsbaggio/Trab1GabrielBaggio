@@ -12,7 +12,7 @@
 typedef struct {
    int borda1X, borda1Y, borda2X, borda2Y;
    bool tem_borda;
-} BOTAO;
+}BOTAO;
 
 typedef struct {
     int borda1X, borda1Y, borda2X, borda2Y;
@@ -53,11 +53,18 @@ private:
     BOTAO addBrilho;
     Slider sliderGama;
     BOTAO addGama;
+    Slider sliderContraste;
+    BOTAO addContraste;
+    Slider sliderBlur;
+    BOTAO addBlur;
 
     BOTAO fliperVertical;
     BOTAO fliperHorizontal;
 
     BOTAO tonsCinza;
+
+    BOTAO save;
+    BOTAO load;
 
     int botaoSelecionado; // 0 = clicar, 1 = pincel, 2 = spray, 3 = marca texto, 4 = balde, 5 = borracha
     int raioCor;
@@ -88,6 +95,10 @@ public:
     BOTAO getBotaoCinza();
     BOTAO getBotaoAddBrilho();
     BOTAO getBotaoAddGama();
+    BOTAO getBotaoAddContraste();
+    BOTAO getBotaoAddBlur();
+    BOTAO getBotaoSave();
+    BOTAO getBotaoLoad();
     void alteraBotaoSelecionado(int botaoSelecionado);
     void carregarNomeArquivos();
     void renderSubmenuArquivos();
@@ -100,7 +111,7 @@ public:
     void setBotaoSelecionado(int botaoSelecionado);
     unsigned char *getRGBA();
     int getRaioCor();
-    void renderSlider(Slider slider, const char* label = nullptr, bool showValue = true);
+    void renderSlider(Slider slider, const char* texto = nullptr, bool mostrarValor = true, bool porcentagem = false);
     bool verificaSegurandoSlider(Slider slider, int mouseX, int mouseY);
     Slider getSliderR();
     Slider getSliderG();
@@ -108,18 +119,24 @@ public:
     Slider getSliderRaio();
     Slider getSliderBrilho();
     Slider getSliderGama();
+    Slider getSliderContraste();
+    Slider getSliderBlur();
     void setSegurandoR(bool segurando);
     void setSegurandoG(bool segurando);
     void setSegurandoB(bool segurando);
     void setSegurandoRaio(bool segurando);
     void setSegurandoBrilho(bool segurando);
     void setSegurandoGama(bool segurando);
+    void setSegurandoContraste(bool segurando);
+    void setSegurandoBlur(bool segurando);
     void mudaValorSliderR(int mouseX);
     void mudaValorSliderG(int mouseX);
     void mudaValorSliderB(int mouseX);
     void mudaValorSliderRaio(int mouseX);
     void mudaValorSliderBrilho(int mouseX);
     void mudaValorSliderGama(int mouseX);
+    void mudaValorSliderContraste(int mouseX);
+    void mudaValorSliderBlur(int mouseX);
     void renderPreviewCor(int screenWidth);
 };
 

@@ -61,6 +61,8 @@ public:
    void aplicarTonsDecinza();
    void adicionarBrilho(int valorBrilho);
    void adicionarGama(int valorGama);
+   void ajustarContraste(int valorContraste);
+   void aplicarBlurGaussiano(int raio);
 };
 
 #endif

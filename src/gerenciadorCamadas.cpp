@@ -426,7 +426,7 @@ void gerenciadorCamadas::aplicarTonsDecinza(){ // aplica o padrao de tons de cin
     }
 }
 
-void gerenciadorCamadas::adicionarBrilho(int valorBrilho){ // add brilho
+void gerenciadorCamadas::adicionarBrilho(int valorBrilho){ // add brilho, só soma os rgb com o valor
     for (int i = 0; i < width * height; i++) {
         int r = camadas[camadaAtiva].camada[i * 4] + valorBrilho;
         int g = camadas[camadaAtiva].camada[i * 4 + 1] + valorBrilho;
@@ -446,8 +446,8 @@ void gerenciadorCamadas::adicionarBrilho(int valorBrilho){ // add brilho
     }
 }
 
-void gerenciadorCamadas::adicionarGama(int valorGama){ // add gama
-    float gama = (float)valorGama / 10;
+void gerenciadorCamadas::adicionarGama(int valorGama){ // add gama, faz um procedimento com lookup table pra ficar mais rapido
+    float gama = (float)valorGama / 100;
 
     unsigned char lookupTable[256];
     
@@ -457,9 +457,112 @@ void gerenciadorCamadas::adicionarGama(int valorGama){ // add gama
         lookupTable[i] = (unsigned char)(corrigido * (float)255 + 0.5);
     }
 
-    for (int i = 0; i < width * height; i++) {
-        camadas[camadaAtiva].camada[i * 4] = lookupTable[camadas[camadaAtiva].camada[i * 4]];
-        camadas[camadaAtiva].camada[i * 4 + 1] = lookupTable[camadas[camadaAtiva].camada[i * 4 + 1]];
-        camadas[camadaAtiva].camada[i * 4 + 2] = lookupTable[camadas[camadaAtiva].camada[i * 4 + 2]];
+    for (int i = 0; i < width; i++) {
+        for(int j = 0; j < height; j++){
+            int pos = (j * width + i) * 4;
+            camadas[camadaAtiva].camada[pos] = lookupTable[camadas[camadaAtiva].camada[pos]];
+            camadas[camadaAtiva].camada[pos + 1] = lookupTable[camadas[camadaAtiva].camada[pos + 1]];
+            camadas[camadaAtiva].camada[pos + 2] = lookupTable[camadas[camadaAtiva].camada[pos + 2]];
+        }
     }
+}
+
+void gerenciadorCamadas::ajustarContraste(int valorContraste){ // add contraste
+    float fator = (float)valorContraste / 100;
+    
+    for (int i = 0; i < width; i++) {
+        for(int j = 0; j < height; j++){
+            int pos = (j * width + i) * 4;
+            if (camadas[camadaAtiva].camada[pos + 3] == 1) {
+                for (int c = 0; c < 3; c++) {
+                    int pos2 = pos + c;
+                    float valor = camadas[camadaAtiva].camada[pos2];
+                    
+                    int novoValor = (int)((valor - 128) * fator + 128);
+                    
+                    if (novoValor > 255) novoValor = 255;
+                    if (novoValor < 0) novoValor = 0;
+                    
+                    camadas[camadaAtiva].camada[pos2] = (unsigned char)novoValor;
+                }
+            }
+        }
+    }
+}
+
+void gerenciadorCamadas::aplicarBlurGaussiano(int raio){
+    // Criar uma cópia temporária da camada para não perder dados durante o processamento
+    unsigned char* tempCamada = new unsigned char[width * height * 4];
+    memcpy(tempCamada, camadas[camadaAtiva].camada, width * height * 4);
+    
+    // Tamanho do kernel (deve ser ímpar)
+    int tamanhoKernel = 2 * raio + 1;
+    
+    // Criar o kernel gaussiano
+    float* kernel = new float[tamanhoKernel * tamanhoKernel];
+    float sigma = raio / 2.0f;
+    float soma = 0.0f;
+    float fatorNormalizacao = 1.0f / (2.0f * 3.14159f * sigma * sigma);
+    
+    // Preencher o kernel com os valores da distribuição gaussiana
+    for (int y = -raio; y <= raio; y++) {
+        for (int x = -raio; x <= raio; x++) {
+            int idx = (y + raio) * tamanhoKernel + (x + raio);
+            kernel[idx] = fatorNormalizacao * exp(-(x*x + y*y) / (2 * sigma * sigma));
+            soma += kernel[idx];
+        }
+    }
+    
+    // Normalizar o kernel
+    for (int i = 0; i < tamanhoKernel * tamanhoKernel; i++) {
+        kernel[i] /= soma;
+    }
+    
+    // Aplicar o filtro na imagem
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int posDestino = (y * width + x) * 4;
+            
+            // Pular pixels transparentes
+            if (camadas[camadaAtiva].camada[posDestino + 3] == 0)
+                continue;
+                
+            float r = 0, g = 0, b = 0;
+            float pesoTotal = 0;
+            
+            // Aplicar convolução
+            for (int ky = -raio; ky <= raio; ky++) {
+                for (int kx = -raio; kx <= raio; kx++) {
+                    int posX = x + kx;
+                    int posY = y + ky;
+                    
+                    // Garantir que não saímos da imagem
+                    if (posX >= 0 && posX < width && posY >= 0 && posY < height) {
+                        int posFonte = (posY * width + posX) * 4;
+                        
+                        // Só considerar pixels visíveis
+                        if (tempCamada[posFonte + 3] != 0) {
+                            int idxKernel = (ky + raio) * tamanhoKernel + (kx + raio);
+                            float peso = kernel[idxKernel];
+                            
+                            r += tempCamada[posFonte] * peso;
+                            g += tempCamada[posFonte + 1] * peso;
+                            b += tempCamada[posFonte + 2] * peso;
+                            pesoTotal += peso;
+                        }
+                    }
+                }
+            }
+            
+            // Normalizar pelo peso total
+            if (pesoTotal > 0) {
+                camadas[camadaAtiva].camada[posDestino] = (unsigned char)(r / pesoTotal);
+                camadas[camadaAtiva].camada[posDestino + 1] = (unsigned char)(g / pesoTotal);
+                camadas[camadaAtiva].camada[posDestino + 2] = (unsigned char)(b / pesoTotal);
+            }
+        }
+    }
+    
+    delete[] kernel;
+    delete[] tempCamada;
 }

@@ -144,6 +144,14 @@ bool verificaClickBotaoInterface(int x, int y){ // funcao pra tratar os clicks n
         interface->alteraBotaoSelecionado(5);
         return 1;
     }
+    else if(interface->verificaClickBotao(interface->getBotaoSave(), x, y)){
+        gCamadas->salvarEstado("state.txt");
+        return 1;
+    }
+    else if(interface->verificaClickBotao(interface->getBotaoLoad(), x, y)){
+        gCamadas->carregarEstado("state.txt");
+        return 1;
+    }
     return 0;
 }
 
@@ -154,6 +162,14 @@ bool verificaClickAddEfeito(int x, int y){ // funcao pra tratar os clicks nas ap
     }
     else if(interface->verificaClickBotao(interface->getBotaoAddGama(), x, y) && gCamadas->getQntCamadas() > 0){
         gCamadas->adicionarGama(interface->getSliderGama().valorAtual);
+        return 1;
+    }
+    else if(interface->verificaClickBotao(interface->getBotaoAddContraste(), x, y) && gCamadas->getQntCamadas() > 0){
+        gCamadas->ajustarContraste(interface->getSliderContraste().valorAtual);
+        return 1;
+    }
+    else if(interface->verificaClickBotao(interface->getBotaoAddBlur(), x, y) && gCamadas->getQntCamadas() > 0){
+        gCamadas->aplicarBlurGaussiano(interface->getSliderBlur().valorAtual);
         return 1;
     }
     else if(interface->verificaClickBotao(interface->getBotaoVertical(), x, y) && gCamadas->getQntCamadas() > 0){
@@ -193,6 +209,12 @@ void iniciaDrags(int x, int y){ // inicia um 'drag do mouse', o evento de quando
     else if(interface->verificaSegurandoSlider(interface->getSliderGama(), x, y)){
         interface->setSegurandoGama(1);
     }
+    else if(interface->verificaSegurandoSlider(interface->getSliderContraste(), x, y)){
+        interface->setSegurandoContraste(1);
+    }
+    else if(interface->verificaSegurandoSlider(interface->getSliderBlur(), x, y)){
+        interface->setSegurandoBlur(1);
+    }
 }
 
 void fimDrags(){ // quando solta o mouse, tira o 'drag'
@@ -203,6 +225,8 @@ void fimDrags(){ // quando solta o mouse, tira o 'drag'
     interface->setSegurandoRaio(0);
     interface->setSegurandoBrilho(0);
     interface->setSegurandoGama(0);
+    interface->setSegurandoContraste(0);
+    interface->setSegurandoBlur(0);
 }
 
 void trataDrags(int x, int y){  // trata a movimentacao do mouse quando tem um drag
@@ -226,6 +250,12 @@ void trataDrags(int x, int y){  // trata a movimentacao do mouse quando tem um d
     }
     else if(interface->getSliderGama().segurando){
         interface->mudaValorSliderGama(x);
+    }
+    else if(interface->getSliderContraste().segurando){
+        interface->mudaValorSliderContraste(x);
+    }
+    else if(interface->getSliderBlur().segurando){
+        interface->mudaValorSliderBlur(x);
     }
 }
 
